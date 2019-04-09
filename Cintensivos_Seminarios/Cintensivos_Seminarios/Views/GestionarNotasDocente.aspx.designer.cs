@@ -148,13 +148,13 @@ namespace Cintensivos_Seminarios.Views {
         protected global::Ext.Net.TextField txtWeight;
         
         /// <summary>
-        /// Control Button1.
+        /// Control btnAdd.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::Ext.Net.Button Button1;
+        protected global::Ext.Net.Button btnAdd;
         
         /// <summary>
         /// Control Button2.
@@ -166,13 +166,13 @@ namespace Cintensivos_Seminarios.Views {
         protected global::Ext.Net.Button Button2;
         
         /// <summary>
-        /// Control Button3.
+        /// Control btnDelete.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::Ext.Net.Button Button3;
+        protected global::Ext.Net.Button btnDelete;
         
         /// <summary>
         /// Control Button4.

@@ -16,8 +16,19 @@
 		var template = '<span style="color:{0};">{1}</span>';
 
 		var change = function (value) {
-			return Ext.String.format(template, (value == "Aceptado") ? "green" : "red", value);
+			return Ext.String.format(template, (value >= 3) ? "green" : "red", value);
 		};
+
+		function insertRecord(grid) {
+			var store = grid.store,
+				row = store.lastOf(store.insert(0, {
+					DESCRIPCION: Ext.getCmp('txtDescription').getValue()+" ("+ Ext.getCmp('txtWeight').getValue()+"%)",
+					NOTA_PORCENTAJE: Ext.getCmp('txtWeight').getValue()
+				}, {})[0]);
+
+		};
+
+
 
 		var edit = function (editor, e) {
             /*
@@ -36,7 +47,8 @@
 
 			// Llamar DirectMethod
 			if (!(e.value === e.originalValue || (Ext.isDate(e.value) && Ext.Date.isEqual(e.value, e.originalValue)))) {
-				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data,e);
+				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data);
+				StoreStudents.load();
 			}
 		};
 
@@ -153,7 +165,7 @@
 							<ColumnModel ID="colummodelid" runat="server">
 								<Columns>
 									<ext:RowNumbererColumn runat="server" Width="35" />
-									<ext:Column runat="server" Text="Codigo" DataIndex="CODIGO" />
+									<ext:Column runat="server" Text="Codigo" DataIndex="CODIGO"></ext:Column>
 									<ext:Column runat="server" Text="Nombre Grupo" CellWrap="true" DataIndex="GRUP_NOMBRE" Flex="2" />
 									<ext:Column runat="server" Text="Periodó Académico" CellWrap="true" DataIndex="Periodó Académico" Flex="2" />
 									<%-- Flex: 1=10% ocupa del contenedor, 2=20% ocupa del contenedor, etc... --%>
@@ -209,7 +221,7 @@
 							<Store>
 								<ext:Store ID="StoreStudents" runat="server" PageSize="5">
 									<Model>
-										<ext:Model runat="server"  IDProperty="ID">
+										<ext:Model runat="server" IDProperty="ID">
 											<Fields>
 												<ext:ModelField Name="CODIGO" Type="String" />
 												<ext:ModelField Name="ESTUDIANTE" />
@@ -229,7 +241,7 @@
 									<ext:Column runat="server" Text="Estudiante" DataIndex="ESTUDIANTE" Flex="1" />
 									<ext:Column runat="server" Text="NOTA 1" DataIndex="NOTA 1" Flex="1" />
 									<ext:Column runat="server" Text="NOTA 2" DataIndex="NOTA 2" Flex="1" />
-									<ext:Column runat="server" Text="DEFINITIVA" DataIndex="DEFINITIVA" Flex="1" i/>
+									<ext:Column runat="server" Text="DEFINITIVA" DataIndex="DEFINITIVA" Flex="1" i />
 								</Columns>
 							</ColumnModel>
 							<Plugins>
@@ -248,9 +260,9 @@
 							</View>
 
 							<Buttons>
-								<ext:Button runat="server" Text="Guardar Notas" Icon="Disk">
+								<ext:Button runat="server" Text="Refrescar" Icon="ArrowRefresh">
 									<Listeners>
-										<Click Handler="#{Store1}.sync();" />
+										<Click Handler="#{StoreStudents}.load();" />
 									</Listeners>
 								</ext:Button>
 							</Buttons>
@@ -332,8 +344,9 @@
 
 					<Buttons>
 
-						<ext:Button ID="Button1" runat="server" Text="Agregar" Icon="TableAdd">
+						<ext:Button ID="btnAdd" runat="server" Text="Agregar" Icon="TableAdd">
 							<Listeners>
+								<Click Handler="insertRecord(#{gridPesos});" />
 							</Listeners>
 						</ext:Button>
 
@@ -341,8 +354,9 @@
 							<Listeners>
 							</Listeners>
 						</ext:Button>
-						<ext:Button ID="Button3" runat="server" Text="Eliminar" Icon="TableDelete">
+						<ext:Button ID="btnDelete" runat="server" Text="Eliminar" Icon="TableDelete">
 							<Listeners>
+								<Click Handler="#{gridPesos}.deleteSelected();" />
 							</Listeners>
 						</ext:Button>
 						<ext:Button ID="Button4" runat="server" Text="Limpiar" Icon="Table">

@@ -173,7 +173,7 @@ namespace Cintensivos_Seminarios.Views
 				}
 				else if (count < 4)
 				{
-					nameFields[count] = new Column() { Text = column.ColumnName, DataIndex = column.ColumnName };
+					nameFields[count] = new Column() { Text = column.ColumnName, DataIndex = column.ColumnName};
 				}
 				else if (count == 4)
 				{
@@ -182,10 +182,12 @@ namespace Cintensivos_Seminarios.Views
 				else if (count == 5)
 				{
 					nameFields[count] = new Column() { Text = column.ColumnName, DataIndex = column.ColumnName };
+					nameFields[count].Renderer.Fn = "change";
 				}
 				else
 				{
 					nameFields[count] = new Column() { Text = RemoveLastWord(column.ColumnName), DataIndex = column.ColumnName, Editor = { new TextField() } };
+					nameFields[count].Renderer.Fn= "change";
 				}
 				count++;
 			}
@@ -263,7 +265,7 @@ namespace Cintensivos_Seminarios.Views
 
 
 		[DirectMethod(Namespace = "notasDocente")]
-		public void Edit(int id, string field, string oldValue, string newValue, object sender, DirectEventArgs e)
+		public void Edit(int id, string field, string oldValue, string newValue, object customer)
 		{
 			
 
@@ -273,6 +275,8 @@ namespace Cintensivos_Seminarios.Views
 			}
 			else
 			{
+				
+
 				//string message = "<b>Property:</b> {0}<br /><b>Field:</b> {1}<br /><b>Old Value:</b> {2}<br /><b>New Value:</b> {3}";
 				string message = "La nota ingresada no es correcta. ";
 				X.Msg.Notify(new NotificationConfig()
@@ -285,6 +289,7 @@ namespace Cintensivos_Seminarios.Views
 				}).Show();
 				
 			}
+			
 			
 		}
 

@@ -1,4 +1,5 @@
 ﻿using Cintensivos_Seminarios.Models;
+using System;
 
 namespace Cintensivos_Seminarios.Controllers
 {
@@ -12,7 +13,7 @@ namespace Cintensivos_Seminarios.Controllers
 		public int total { get; set; }
 		public int individual { get; set; }
 		public int pagoDocente { get; set; }
-		public string fijo { get; set; }
+		public String fijo { get; set; }
 
 		public Ccosto()
 		{

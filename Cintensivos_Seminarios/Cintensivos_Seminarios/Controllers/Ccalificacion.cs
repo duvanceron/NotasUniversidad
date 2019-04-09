@@ -1,4 +1,5 @@
 ﻿using Cintensivos_Seminarios.Models;
+using System;
 
 namespace Cintensivos_Seminarios.Controllers
 {
@@ -20,7 +21,7 @@ namespace Cintensivos_Seminarios.Controllers
 		{
 			modelCalificacion.caliId = controllerCalificacion.caliId;
 			modelCalificacion.notaId = controllerCalificacion.notaId;
-			modelCalificacion.caliValor = controllerCalificacion.caliValor;
+			modelCalificacion.caliValor = Math.Round(controllerCalificacion.caliValor,2);
 			modelCalificacion.premId = controllerCalificacion.premId;
 			return modelCalificacion.MergeNotaIndividual(modelCalificacion);
 		}

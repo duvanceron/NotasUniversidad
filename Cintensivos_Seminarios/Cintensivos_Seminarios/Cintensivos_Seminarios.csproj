@@ -140,7 +140,6 @@
     <Content Include="App_Readme\Transformer.NET\README.txt" />
     <Content Include="Ext.NET.Default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="Views\Default.aspx" />
     <Content Include="Views\Reportes.aspx" />
     <Content Include="Views\GestionarNotasDocente.aspx" />
     <Content Include="Web.config" />
@@ -184,13 +183,6 @@
     <Compile Include="Models\Mproceso.cs" />
     <Compile Include="Models\Msistema_evaluacion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Views\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Views\Reportes.aspx.cs">
       <DependentUpon>Reportes.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
