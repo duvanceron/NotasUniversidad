@@ -1,8 +1,12 @@
 ﻿using Cintensivos_Seminarios.Controllers;
 using Ext.Net;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+
 
 namespace Cintensivos_Seminarios.Views
 {
@@ -15,8 +19,12 @@ namespace Cintensivos_Seminarios.Views
 		Csistema_evaluacion controllerSistema;
 		Cnota controllerNota;
 		Ccalificacion controllerCalificacion;
+		List<Cnota> listNote;
 		DataTable dtNotes;
 		DataTable dtSeminarios;
+		DataTable dtNotesGroup;
+		
+		
 		public SeminariosDocente()
 		{
 			controllerPrematricula = new Cprematricula();
@@ -26,6 +34,8 @@ namespace Cintensivos_Seminarios.Views
 			controllerSistema = new Csistema_evaluacion();
 			controllerNota = new Cnota();
 			controllerCalificacion = new Ccalificacion();
+			listNote = new List<Cnota>();
+			dtNotesGroup = new DataTable();
 			dtNotes = new DataTable();
 			dtSeminarios = new DataTable();
 		}
@@ -49,21 +59,19 @@ namespace Cintensivos_Seminarios.Views
 			StSistemaEvaluacion.DataSource = controllerSistema.ConsultarSistemasEvaluacion();
 			StSistemaEvaluacion.DataBind();
 
+
 		}
 
 
 
-		/*public void Refresh(object sender, StoreReadDataEventArgs e)
-		{
-			this.LoadData();
-		}*/
+
 
 
 		protected void ConsultGroups(object sender, DirectEventArgs e)
 		{
 			this.controllerGrupo.fkCurso = Convert.ToInt32(e.ExtraParams["CURS_ID"]);
 			this.controllerDocente.codigo = 57425471;
-			
+
 
 
 			if (Convert.ToInt32(e.ExtraParams["CURS_ID"]) == 1)
@@ -99,7 +107,7 @@ namespace Cintensivos_Seminarios.Views
 			/*Reconfigurar gridPanel*/
 
 			grid2.ColumnModel.Columns.Add(BuildGridPanel(dtSeminarios));
-
+			string tex=cmbxSistemaEvaluacion.Text;
 
 			grid2.Render();
 
@@ -173,7 +181,7 @@ namespace Cintensivos_Seminarios.Views
 				}
 				else if (count < 4)
 				{
-					nameFields[count] = new Column() { Text = column.ColumnName, DataIndex = column.ColumnName};
+					nameFields[count] = new Column() { Text = column.ColumnName, DataIndex = column.ColumnName };
 				}
 				else if (count == 4)
 				{
@@ -187,7 +195,7 @@ namespace Cintensivos_Seminarios.Views
 				else
 				{
 					nameFields[count] = new Column() { Text = RemoveLastWord(column.ColumnName), DataIndex = column.ColumnName, Editor = { new TextField() } };
-					nameFields[count].Renderer.Fn= "change";
+					nameFields[count].Renderer.Fn = "change";
 				}
 				count++;
 			}
@@ -259,7 +267,8 @@ namespace Cintensivos_Seminarios.Views
 
 
 			controllerNota.grup_id = Convert.ToInt32(e.ExtraParams["CODIGO"]);
-			stPesos.DataSource = controllerNota.ConsultarPesosAcademicos(controllerNota);
+			dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
+			stPesos.DataSource = dtNotesGroup;
 			stPesos.DataBind();
 		}
 
@@ -267,15 +276,17 @@ namespace Cintensivos_Seminarios.Views
 		[DirectMethod(Namespace = "notasDocente")]
 		public void Edit(int id, string field, string oldValue, string newValue, object customer)
 		{
-			
 
-			if (IsNumber(newValue) && !IsEmpty(newValue)&&IsCorrectTheNota(newValue))
+
+			if (IsNumber(newValue) && !IsEmpty(newValue) && IsCorrectTheNota(newValue))
 			{
 				EditNote(id, field, newValue);
+				GridStudents.GetStore().CommitChanges();
+
 			}
 			else
 			{
-				
+
 
 				//string message = "<b>Property:</b> {0}<br /><b>Field:</b> {1}<br /><b>Old Value:</b> {2}<br /><b>New Value:</b> {3}";
 				string message = "La nota ingresada no es correcta. ";
@@ -287,10 +298,12 @@ namespace Cintensivos_Seminarios.Views
 					Width = 200,
 					Height = 100
 				}).Show();
-				
+
+				GridStudents.GetStore().RejectChanges();
+
 			}
-			
-			
+
+
 		}
 
 		private void EditNote(int premId, string notaId, string note)
@@ -360,8 +373,41 @@ namespace Cintensivos_Seminarios.Views
 			return false;
 		}
 
+		[DirectMethod(Namespace = "notasDocente")]
+		public void ConvertToDataTable(String jsonNotasGroup)
+		{
+			DataTable dt = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
+			
+
+			string message = "Pesos academicos modificados. ";
+			X.Msg.Notify(new NotificationConfig()
+			{
+				Title = "Éxito",
+				Html = string.Format(message),
+				Icon = Icon.BulletError,
+				Width = 200,
+				Height = 100
+			}).Show();
+
+		}
+
+		protected void ModifyNoteGroup(object sender, DirectEventArgs e)
+		{
 
 
+		
+			string message = "Pesos academicos modificados. ";
+			X.Msg.Notify(new NotificationConfig()
+			{
+				Title = "Éxito",
+				Html = string.Format(message),
+				Icon = Icon.BulletError,
+				Width = 200,
+				Height = 100
+			}).Show();
+
+
+		}
 	}
 
 

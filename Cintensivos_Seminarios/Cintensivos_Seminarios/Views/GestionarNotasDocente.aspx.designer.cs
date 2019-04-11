@@ -103,13 +103,13 @@ namespace Cintensivos_Seminarios.Views {
         protected global::Ext.Net.Window winDetails;
         
         /// <summary>
-        /// Control pnlAddPeso.
+        /// Control pnlAddPesos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::Ext.Net.Panel pnlAddPeso;
+        protected global::Ext.Net.FormPanel pnlAddPesos;
         
         /// <summary>
         /// Control cmbxSistemaEvaluacion.
@@ -175,13 +175,13 @@ namespace Cintensivos_Seminarios.Views {
         protected global::Ext.Net.Button btnDelete;
         
         /// <summary>
-        /// Control Button4.
+        /// Control btnClear.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::Ext.Net.Button Button4;
+        protected global::Ext.Net.Button btnClear;
         
         /// <summary>
         /// Control pnlPesosAcademicos.

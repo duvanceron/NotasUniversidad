@@ -21,13 +21,17 @@
 
 		function insertRecord(grid) {
 			var store = grid.store,
-				row = store.lastOf(store.insert(0, {
-					DESCRIPCION: Ext.getCmp('txtDescription').getValue()+" ("+ Ext.getCmp('txtWeight').getValue()+"%)",
-					NOTA_PORCENTAJE: Ext.getCmp('txtWeight').getValue()
+				row = store.indexOf(store.insert(0, {
+					DESCRIPCION: Ext.getCmp('txtDescription').getValue() + " (" + Ext.getCmp('txtWeight').getValue() + "%)",
+					NOTA_PORCENTAJE: Ext.getCmp('txtWeight').getValue(),
+					SISE_NOMBRE:App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE, //Cambiar ya que solo admite dos valores
 				}, {})[0]);
 
 		};
+		var cleanRecords = function () {
+			App.pnlAddPesos.reset();
 
+		};
 
 
 		var edit = function (editor, e) {
@@ -48,9 +52,21 @@
 			// Llamar DirectMethod
 			if (!(e.value === e.originalValue || (Ext.isDate(e.value) && Ext.Date.isEqual(e.value, e.originalValue)))) {
 				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data);
-				StoreStudents.load();
+
 			}
 		};
+
+		var GetDataGrid = function () {
+			//var data = new Array();
+			//var records = App.stPesos.getRange();
+			//for (var i = 0; i < records.length; i++) {
+			//	data.push(records[i].data);
+			//}
+			//jsonDataEncode = Ext.util.JSON.encode(data)
+			notasDocente.ConvertToDataTable(Ext.encode(App.gridPesos.getRowsValues()));
+		};
+
+		
 
 	</script>
 </head>
@@ -191,7 +207,7 @@
 								<ext:RowSelectionModel runat="server" Mode="Single">
 									<DirectEvents>
 										<Select OnEvent="ConsultNote" Buffer="250">
-											<EventMask ShowMask="true" Target="CustomTarget" CustomTarget="#{GridStudents}" />
+											<EventMask ShowMask="true" Msg="Consultando..." />
 											<ExtraParams>
 												<ext:Parameter Name="CODIGO" Value="record.data.CODIGO" Mode="Raw" />
 											</ExtraParams>
@@ -241,7 +257,7 @@
 									<ext:Column runat="server" Text="Estudiante" DataIndex="ESTUDIANTE" Flex="1" />
 									<ext:Column runat="server" Text="NOTA 1" DataIndex="NOTA 1" Flex="1" />
 									<ext:Column runat="server" Text="NOTA 2" DataIndex="NOTA 2" Flex="1" />
-									<ext:Column runat="server" Text="DEFINITIVA" DataIndex="DEFINITIVA" Flex="1" i />
+									<ext:Column runat="server" Text="DEFINITIVA" DataIndex="DEFINITIVA" Flex="1" />
 								</Columns>
 							</ColumnModel>
 							<Plugins>
@@ -287,8 +303,8 @@
 			Hidden="true">
 
 			<Items>
-				<ext:Panel
-					ID="pnlAddPeso"
+				<ext:FormPanel
+					ID="pnlAddPesos"
 					runat="server"
 					Layout="HBoxLayout"
 					BodyPadding="5"
@@ -335,7 +351,8 @@
 									</Store>
 								</ext:ComboBox>
 								<ext:TextField ID="txtDescription" runat="server" FieldLabel="Descripción de la nota" Name="Title" Flex="2" MarginSpec="0 0 0 5" Width="330" />
-								<ext:TextField ID="txtWeight" runat="server" FieldLabel="Peso de la nota" Name="Title" MarginSpec="0 0 0 5" />
+								<ext:TextField ID="txtWeight" runat="server" FieldLabel="Peso de la nota" Name="Title" MarginSpec="0 0 0 5"></ext:TextField>
+
 							</Items>
 						</ext:FieldContainer>
 
@@ -359,15 +376,16 @@
 								<Click Handler="#{gridPesos}.deleteSelected();" />
 							</Listeners>
 						</ext:Button>
-						<ext:Button ID="Button4" runat="server" Text="Limpiar" Icon="Table">
+						<ext:Button ID="btnClear" runat="server" Text="Limpiar" Icon="Table">
 							<Listeners>
+								<Click Handler="cleanRecords();" />
 							</Listeners>
 						</ext:Button>
 
 
 					</Buttons>
 
-				</ext:Panel>
+				</ext:FormPanel>
 				<ext:Panel
 					ID="pnlPesosAcademicos"
 					Icon="Note"
@@ -375,14 +393,13 @@
 					Region="South"
 					Title="Pesos registrados"
 					Frame="true"
-					Layout="HBoxLayout">
+					Layout="FitLayout">
 
 					<Items>
 						<ext:GridPanel
-							AutoScroll="true"
 							ID="gridPesos"
-							Flex="3"
-							runat="server">
+							runat="server"
+							AutoScroll="true">
 							<Store>
 								<ext:Store ID="stPesos" runat="server">
 									<Model>
@@ -428,12 +445,13 @@
 			</Items>
 			<Buttons>
 
-				<ext:Button ID="btnSave" runat="server" Text="Save" Icon="Disk">
+				<ext:Button ID="btnSave" runat="server" Text="Guardar" Icon="Disk">
 					<Listeners>
+						<Click Handler="GetDataGrid();" />
 					</Listeners>
 				</ext:Button>
 
-				<ext:Button ID="btnCancel" runat="server" Text="Cancel" Icon="Cancel">
+				<ext:Button ID="btnCancel" runat="server" Text="Cancelar" Icon="Cancel">
 					<Listeners>
 					</Listeners>
 				</ext:Button>
