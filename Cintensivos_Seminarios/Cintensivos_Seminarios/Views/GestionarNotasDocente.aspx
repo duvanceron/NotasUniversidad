@@ -22,11 +22,12 @@
 		function insertRecord(grid) {
 			var store = grid.store,
 				row = store.indexOf(store.insert(0, {
-					DESCRIPCION: Ext.getCmp('txtDescription').getValue() + " (" + Ext.getCmp('txtWeight').getValue() + "%)",
+					DESCRIPCION: Ext.getCmp('txtDescription').getValue(),
 					NOTA_PORCENTAJE: Ext.getCmp('txtWeight').getValue(),
-					SISE_NOMBRE:App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE, //Cambiar ya que solo admite dos valores
+					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE, //Cambiar ya que solo admite dos valores
 				}, {})[0]);
 
+			cleanRecords();
 		};
 		var cleanRecords = function () {
 			App.pnlAddPesos.reset();
@@ -50,6 +51,15 @@
             */
 
 			// Llamar DirectMethod
+			var jsonNotasPeso = JSON.parse(Ext.encode(App.gridPesos.getRowsValues()));
+			for (var i in jsonNotasPeso) {
+				if (jsonNotasPeso[i].SISE_NOMBRE == App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE) {
+						console.log(jsonNotasPeso[i].DESCRIPCION);
+				}
+				
+		
+			}
+
 			if (!(e.value === e.originalValue || (Ext.isDate(e.value) && Ext.Date.isEqual(e.value, e.originalValue)))) {
 				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data);
 
@@ -63,10 +73,10 @@
 			//	data.push(records[i].data);
 			//}
 			//jsonDataEncode = Ext.util.JSON.encode(data)
-			notasDocente.ConvertToDataTable(Ext.encode(App.gridPesos.getRowsValues()));
+			Docente.ConvertToDataTable(Ext.encode(App.gridPesos.getRowsValues()));
 		};
 
-		
+
 
 	</script>
 </head>

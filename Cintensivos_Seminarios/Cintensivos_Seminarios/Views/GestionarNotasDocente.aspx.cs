@@ -376,9 +376,13 @@ namespace Cintensivos_Seminarios.Views
 		[DirectMethod(Namespace = "notasDocente")]
 		public void ConvertToDataTable(String jsonNotasGroup)
 		{
-			DataTable dt = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
-			
+			DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
 
+			foreach (var row in dtNotesGroup.Rows)
+			{
+
+			}
+			
 			string message = "Pesos academicos modificados. ";
 			X.Msg.Notify(new NotificationConfig()
 			{
