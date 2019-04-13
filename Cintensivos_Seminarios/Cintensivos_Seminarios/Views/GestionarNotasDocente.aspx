@@ -17,64 +17,134 @@
 
 		var change = function (value) {
 			return Ext.String.format(template, (value >= 3) ? "green" : "red", value);
-		};
+		}
+
+		function insertRow(grid) {
+			if (!isFieldEmpty(App.txtWeight.value) && !isFieldEmpty(App.txtDescription.value) &&
+				isPositive(App.txtWeight.value)&& !isFieldEmpty(App.cmbxSistemaEvaluacion.value)) {
+
+				verifyData(grid);
+
+			} else {
+				showMsgError2("Los datos ingresados no son correctos");
+
+
+			}
+		}
+
+		function verifyData(grid) {
+			var jsonNotasPeso = JSON.parse(Ext.encode(App.gridPesos.getRowsValues()));
+			var porcentajeNotas = 0;
+			for (var i in jsonNotasPeso) {
+				if (jsonNotasPeso[i].SISE_NOMBRE == App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE) {
+
+					porcentajeNotas += parseInt(jsonNotasPeso[i].NOTA_PORCENTAJE);
+				}
+
+
+			}
+			porcentajeNotas = porcentajeNotas + parseInt(App.txtWeight.value);
+
+			if (App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE == "PARCIAL 70%") {
+				if (porcentajeNotas <= 70) {
+					insertRecord(grid);
+				} else {
+
+					showMsgError2("Peso de la nota incorrecto.");
+				}
+
+
+			}
+			else if (App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE == "PARCIAL 30%") {
+				if (porcentajeNotas <= 30) {
+					insertRecord(grid);
+				} else {
+					showMsgError2("Peso de la nota incorrecto.");
+				}
+			}
+
+
+		}
 
 		function insertRecord(grid) {
 			var store = grid.store,
 				row = store.indexOf(store.insert(0, {
 					DESCRIPCION: Ext.getCmp('txtDescription').getValue(),
-					NOTA_PORCENTAJE: Ext.getCmp('txtWeight').getValue(),
-					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE, //Cambiar ya que solo admite dos valores
+					NOTA_PORCENTAJE: Math.round(parseInt(Ext.getCmp('txtWeight').getValue())),
+					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE,
 				}, {})[0]);
 
 			cleanRecords();
-		};
-		var cleanRecords = function () {
-			App.pnlAddPesos.reset();
-
-		};
-
+		}
 
 		var edit = function (editor, e) {
             /*
                 "e"   es un evento para editar con las siguientes properties.
 
                     grid - EL grid
-                    record - El nombre del campo que fue editado
+                    record - El nombre del campo que fue editad
                     field - El nombre del campo que fue editado 
                     value - el valor que se colocara. 
                     originalValue - el valor original antes de ser editado.
-                    row - fila de la tabla del gridpanel
-                    column - The grid Column defining the column that was edited.
-                    rowIdx - The row index that was edited
-                    colIdx - The column index that was edited
+         
             */
 
 			// Llamar DirectMethod
-			var jsonNotasPeso = JSON.parse(Ext.encode(App.gridPesos.getRowsValues()));
-			for (var i in jsonNotasPeso) {
-				if (jsonNotasPeso[i].SISE_NOMBRE == App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE) {
-						console.log(jsonNotasPeso[i].DESCRIPCION);
-				}
-				
-		
-			}
+
 
 			if (!(e.value === e.originalValue || (Ext.isDate(e.value) && Ext.Date.isEqual(e.value, e.originalValue)))) {
 				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data);
 
 			}
-		};
+		}
 
 		var GetDataGrid = function () {
-			//var data = new Array();
-			//var records = App.stPesos.getRange();
-			//for (var i = 0; i < records.length; i++) {
-			//	data.push(records[i].data);
-			//}
-			//jsonDataEncode = Ext.util.JSON.encode(data)
-			Docente.ConvertToDataTable(Ext.encode(App.gridPesos.getRowsValues()));
-		};
+			notasDocente.ConvertToDataTable(Ext.encode(App.gridPesos.getRowsValues()));
+		}
+
+
+
+
+		function showMsgError(msg) {
+			Ext.net.Notification.show({
+				iconCls: '#Error',
+				pinEvent: 'click',
+				html: msg,
+				title: 'Error'
+			});
+		}
+
+		function showMsgError2(msg) {
+			Ext.Msg.info({
+				ui: 'warning',
+				title: 'Error',
+				html: msg,
+				iconCls: '#Error'
+			});
+		}
+
+
+		var cleanRecords = function () {
+			App.pnlAddPesos.reset();
+
+		}
+
+		function isFieldEmpty(txtField) {
+			if (txtField == ""||txtField ==null) {
+				return true;
+			}
+			return false;
+		}
+
+		function isPositive(number) {
+			if (parseInt(number) >= 1) {
+				return true;
+			}
+			return false;
+		}
+
+
+
 
 
 
@@ -373,7 +443,7 @@
 
 						<ext:Button ID="btnAdd" runat="server" Text="Agregar" Icon="TableAdd">
 							<Listeners>
-								<Click Handler="insertRecord(#{gridPesos});" />
+								<Click Handler="insertRow(#{gridPesos});" />
 							</Listeners>
 						</ext:Button>
 

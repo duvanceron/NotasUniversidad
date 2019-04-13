@@ -395,23 +395,7 @@ namespace Cintensivos_Seminarios.Views
 
 		}
 
-		protected void ModifyNoteGroup(object sender, DirectEventArgs e)
-		{
-
-
-		
-			string message = "Pesos academicos modificados. ";
-			X.Msg.Notify(new NotificationConfig()
-			{
-				Title = "Éxito",
-				Html = string.Format(message),
-				Icon = Icon.BulletError,
-				Width = 200,
-				Height = 100
-			}).Show();
-
-
-		}
+	
 	}
 
 
