@@ -14,7 +14,7 @@
 
 	<script>
 		var template = '<span style="color:{0};">{1}</span>';
-
+		var jsonPesos = [];
 		var change = function (value) {
 			return Ext.String.format(template, (value >= 3) ? "green" : "red", value);
 		}
@@ -98,8 +98,14 @@
 			}
 		}
 
-		var GetDataGrid = function () {
-			notasDocente.ConvertToDataTable(Ext.encode(App.gridPesos.getRowsValues()));
+		saveChanges = function () {
+			notasDocente.ConvertToDataTable(Ext.encode(App.gridPesos.getRowsValues()), Ext.encode(jsonPesos));
+			jsonPesos =[];
+		}
+		function deleteRecords(grid) {
+			jsonPesos.push(App.gridPesos.selection.data);
+			console.log(jsonPesos);
+			grid.deleteSelected();
 		}
 
 
@@ -453,7 +459,7 @@
 						</ext:Button>
 						<ext:Button ID="btnDelete" runat="server" Text="Eliminar" Icon="TableDelete">
 							<Listeners>
-								<Click Handler="#{gridPesos}.deleteSelected();" />
+								<Click Handler="deleteRecords(#{gridPesos});" />
 							</Listeners>
 						</ext:Button>
 						<ext:Button ID="btnClear" runat="server" Text="Limpiar" Icon="Table">
@@ -527,7 +533,7 @@
 
 				<ext:Button ID="btnSave" runat="server" Text="Guardar" Icon="Disk">
 					<Listeners>
-						<Click Handler="GetDataGrid();" />
+						<Click Handler="saveChanges();" />
 					</Listeners>
 				</ext:Button>
 

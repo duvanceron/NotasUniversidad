@@ -2,7 +2,6 @@
 using Ext.Net;
 using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -23,8 +22,8 @@ namespace Cintensivos_Seminarios.Views
 		DataTable dtNotes;
 		DataTable dtSeminarios;
 		DataTable dtNotesGroup;
-		
-		
+
+
 		public SeminariosDocente()
 		{
 			controllerPrematricula = new Cprematricula();
@@ -107,7 +106,7 @@ namespace Cintensivos_Seminarios.Views
 			/*Reconfigurar gridPanel*/
 
 			grid2.ColumnModel.Columns.Add(BuildGridPanel(dtSeminarios));
-			string tex=cmbxSistemaEvaluacion.Text;
+			string tex = cmbxSistemaEvaluacion.Text;
 
 			grid2.Render();
 
@@ -263,10 +262,11 @@ namespace Cintensivos_Seminarios.Views
 		public void GestionarPesos(object sender, DirectEventArgs e)
 		{
 			winDetails.Hidden = false;
-			winDetails.Title = Convert.ToString(e.ExtraParams["GRUP_NOMBRE"]);
+			Session["GRUP_NOMBRE"] = Convert.ToString(e.ExtraParams["GRUP_NOMBRE"]);
+			Session["CODIGO"] = Convert.ToInt32(e.ExtraParams["CODIGO"]);
 
-
-			controllerNota.grup_id = Convert.ToInt32(e.ExtraParams["CODIGO"]);
+			winDetails.Title = Convert.ToString(Session["GRUP_NOMBRE"]);
+			controllerNota.grup_id = Convert.ToInt32(Session["CODIGO"]);
 			dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
 			stPesos.DataSource = dtNotesGroup;
 			stPesos.DataBind();
@@ -287,8 +287,6 @@ namespace Cintensivos_Seminarios.Views
 			else
 			{
 
-
-				//string message = "<b>Property:</b> {0}<br /><b>Field:</b> {1}<br /><b>Old Value:</b> {2}<br /><b>New Value:</b> {3}";
 				string message = "La nota ingresada no es correcta. ";
 				X.Msg.Notify(new NotificationConfig()
 				{
@@ -314,6 +312,44 @@ namespace Cintensivos_Seminarios.Views
 			controllerCalificacion.premId = premId;
 
 			controllerCalificacion.MergeNotaIndividual(controllerCalificacion);
+
+		}
+
+
+		[DirectMethod(Namespace = "notasDocente")]
+		public void ConvertToDataTable(String jsonNotasGroup,String jsonPesos)
+		{
+			DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
+
+			DataTable dtPesos = (DataTable)JsonConvert.DeserializeObject(jsonPesos, (typeof(DataTable)));
+
+			controllerNota.grup_id = Convert.ToInt32(Session["CODIGO"]);
+			dtNotesGroup= controllerNota.ConsultarPesosAcademicos(controllerNota);
+
+			DataTable dtdateToRemove = GetInnerData(dtNotesGroup, dtPesos);
+			//DataTable dt = LoadTable();
+			//for (int i = 0; i < dtNotesGroup.Rows.Count  ; i++ )
+			//{
+			//	for (int j = 0; j < dtNotesGroupModify.Rows.Count ; j++)
+			//	{
+			//		if (dtNotesGroup.Rows[i]["NOTA_ID"].ToString() != dtNotesGroupModify.Rows[j]["NOTA_ID"].ToString())
+			//		{
+			//			DataRow row = dt.NewRow();
+			//			row["NOTA_ID"] = dtNotesGroup.Rows[i]["NOTA_ID"].ToString(); 
+			//			row["DESCRIPCION"] = dtNotesGroup.Rows[i]["DESCRIPCION"].ToString();
+			//			row["NOTA_PORCENTAJE"] = dtNotesGroup.Rows[i]["NOTA_PORCENTAJE"].ToString();
+			//			row["SISE_NOMBRE"] = dtNotesGroup.Rows[i]["SISE_NOMBRE"].ToString();
+			//			dt.Rows.Add(row);
+
+			//		}
+			//	}
+
+			//}
+			//DataTable newtemp1 = dt;
+
+
+			Session.Remove("GRUP_NOMBRE");
+			Session.Remove("CODIGO");
 
 		}
 		private static String RemoveLastWord(String s)
@@ -373,29 +409,31 @@ namespace Cintensivos_Seminarios.Views
 			return false;
 		}
 
-		[DirectMethod(Namespace = "notasDocente")]
-		public void ConvertToDataTable(String jsonNotasGroup)
+		//private DataTable LoadTable()
+		//{
+		//	DataTable dt = new DataTable();
+		//	dt.Columns.Add("NOTA_ID");
+		//	dt.Columns.Add("DESCRIPCION");
+		//	dt.Columns.Add("NOTA_PORCENTAJE");
+		//	dt.Columns.Add("SISE_NOMBRE");
+
+		//	return dt;
+		//}
+
+		public DataTable GetInnerData(DataTable dt1, DataTable dt2) 
 		{
-			DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
+			DataTable dtMerged = (from a in dt1.AsEnumerable()
+								  join b in dt2.AsEnumerable()
+								  on a["NOTA_ID"].ToString() equals b["NOTA_ID"].ToString()
+								  into g
+								  where g.Count() > 0
+								  select a).CopyToDataTable();
 
-			foreach (var row in dtNotesGroup.Rows)
-			{
-
-			}
-			
-			string message = "Pesos academicos modificados. ";
-			X.Msg.Notify(new NotificationConfig()
-			{
-				Title = "Éxito",
-				Html = string.Format(message),
-				Icon = Icon.BulletError,
-				Width = 200,
-				Height = 100
-			}).Show();
-
+			return dtMerged;
 		}
 
-	
+
+
 	}
 
 
