@@ -8,7 +8,7 @@ namespace Cintensivos_Seminarios.Controllers
 		private ConnectionOracle conn ;
 		private Transaction[] trans;
 		private Parametro[] parameter;
-		public Mprematricula prematricula = new Mprematricula();
+		public Mprematricula prematricula;
 
 		public int fkestudiante { get; set; }
 		public int fkgrupo { get; set; }
@@ -18,6 +18,7 @@ namespace Cintensivos_Seminarios.Controllers
 		public Cprematricula()
 		{
 			conn = new ConnectionOracle();
+			prematricula = new Mprematricula();
 		}
 
 		public bool mergePrematricula(Cprematricula obj)

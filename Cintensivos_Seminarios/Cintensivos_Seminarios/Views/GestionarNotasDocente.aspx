@@ -69,6 +69,7 @@
 		function insertRecord(grid) {
 			var store = grid.store,
 				row = store.indexOf(store.insert(0, {
+					NOTA_ID:-1,
 					DESCRIPCION: Ext.getCmp('txtDescription').getValue(),
 					NOTA_PORCENTAJE: Math.round(parseInt(Ext.getCmp('txtWeight').getValue())),
 					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE,
@@ -91,15 +92,15 @@
 
 			// Llamar DirectMethod
 
-
+			//e.value = e.value.replace(",", ".");
 			if (!(e.value === e.originalValue || (Ext.isDate(e.value) && Ext.Date.isEqual(e.value, e.originalValue)))) {
 				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data);
-
+			;
 			}
 		}
 
 		saveChanges = function () {
-			notasDocente.ConvertToDataTable(Ext.encode(App.gridPesos.getRowsValues()), Ext.encode(jsonPesos));
+			notasDocente.ModifyNotesGroup(Ext.encode(App.gridPesos.getRowsValues()), Ext.encode(jsonPesos));
 			jsonPesos =[];
 		}
 		function deleteRecords(grid) {

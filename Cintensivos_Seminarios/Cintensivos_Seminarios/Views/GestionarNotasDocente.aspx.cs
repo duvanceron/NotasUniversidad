@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 
 
@@ -22,7 +23,7 @@ namespace Cintensivos_Seminarios.Views
 		DataTable dtNotes;
 		DataTable dtSeminarios;
 		DataTable dtNotesGroup;
-
+		CultureInfo culture;
 
 		public SeminariosDocente()
 		{
@@ -37,6 +38,7 @@ namespace Cintensivos_Seminarios.Views
 			dtNotesGroup = new DataTable();
 			dtNotes = new DataTable();
 			dtSeminarios = new DataTable();
+			culture = new CultureInfo("en-US");
 		}
 		protected void Page_Load(object sender, EventArgs e)
 		{
@@ -266,7 +268,7 @@ namespace Cintensivos_Seminarios.Views
 			Session["CODIGO"] = Convert.ToInt32(e.ExtraParams["CODIGO"]);
 
 			winDetails.Title = Convert.ToString(Session["GRUP_NOMBRE"]);
-			controllerNota.grup_id = Convert.ToInt32(Session["CODIGO"]);
+			controllerNota.grup_Id = Convert.ToInt32(Session["CODIGO"]);
 			dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
 			stPesos.DataSource = dtNotesGroup;
 			stPesos.DataBind();
@@ -276,7 +278,7 @@ namespace Cintensivos_Seminarios.Views
 		[DirectMethod(Namespace = "notasDocente")]
 		public void Edit(int id, string field, string oldValue, string newValue, object customer)
 		{
-
+			//newValue= newValue.Replace(',', '.');
 
 			if (IsNumber(newValue) && !IsEmpty(newValue) && IsCorrectTheNota(newValue))
 			{
@@ -308,7 +310,7 @@ namespace Cintensivos_Seminarios.Views
 		{
 			controllerCalificacion.caliId = -1;
 			controllerCalificacion.notaId = GetLastWord(notaId);
-			controllerCalificacion.caliValor = Convert.ToDouble(note);
+			controllerCalificacion.caliValor = Convert.ToDouble(note,culture);
 			controllerCalificacion.premId = premId;
 
 			controllerCalificacion.MergeNotaIndividual(controllerCalificacion);
@@ -317,41 +319,41 @@ namespace Cintensivos_Seminarios.Views
 
 
 		[DirectMethod(Namespace = "notasDocente")]
-		public void ConvertToDataTable(String jsonNotasGroup,String jsonPesos)
+		public void ModifyNotesGroup(String jsonNotasGroup,String jsonPesos)
 		{
-			DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
+			try {
+				DataTable dtPesos = (DataTable)JsonConvert.DeserializeObject(jsonPesos, (typeof(DataTable)));
+				controllerNota.grup_Id = Convert.ToInt32(Session["CODIGO"]);
+				dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
 
-			DataTable dtPesos = (DataTable)JsonConvert.DeserializeObject(jsonPesos, (typeof(DataTable)));
+				DataTable dtdateToRemove = GetInnerData(dtNotesGroup, dtPesos);
+				RemoveNoteGroup(dtdateToRemove);
 
-			controllerNota.grup_id = Convert.ToInt32(Session["CODIGO"]);
-			dtNotesGroup= controllerNota.ConsultarPesosAcademicos(controllerNota);
+				DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
 
-			DataTable dtdateToRemove = GetInnerData(dtNotesGroup, dtPesos);
-			//DataTable dt = LoadTable();
-			//for (int i = 0; i < dtNotesGroup.Rows.Count  ; i++ )
-			//{
-			//	for (int j = 0; j < dtNotesGroupModify.Rows.Count ; j++)
-			//	{
-			//		if (dtNotesGroup.Rows[i]["NOTA_ID"].ToString() != dtNotesGroupModify.Rows[j]["NOTA_ID"].ToString())
-			//		{
-			//			DataRow row = dt.NewRow();
-			//			row["NOTA_ID"] = dtNotesGroup.Rows[i]["NOTA_ID"].ToString(); 
-			//			row["DESCRIPCION"] = dtNotesGroup.Rows[i]["DESCRIPCION"].ToString();
-			//			row["NOTA_PORCENTAJE"] = dtNotesGroup.Rows[i]["NOTA_PORCENTAJE"].ToString();
-			//			row["SISE_NOMBRE"] = dtNotesGroup.Rows[i]["SISE_NOMBRE"].ToString();
-			//			dt.Rows.Add(row);
+				Session.Remove("GRUP_NOMBRE");
+				Session.Remove("CODIGO");
 
-			//		}
-			//	}
+			}
+			catch { };
+			
+		
+		}
 
-			//}
-			//DataTable newtemp1 = dt;
+		private void RemoveNoteGroup(DataTable dtdateToRemove)
+		{
+			List<Cnota> lista = new List<Cnota>();
+			foreach (DataRow row in dtdateToRemove.Rows) {
+				controllerNota.nota_Id =Convert.ToInt32(row["NOTA_ID"]);
+				lista.Add(controllerNota);
+			}
 
-
-			Session.Remove("GRUP_NOMBRE");
-			Session.Remove("CODIGO");
+			controllerNota.RemoveNoteGroup(lista);
+			
 
 		}
+
+
 		private static String RemoveLastWord(String s)
 		{
 			int pos;
@@ -397,9 +399,10 @@ namespace Cintensivos_Seminarios.Views
 
 		private bool IsCorrectTheNota(String value)
 		{
+			
 			if (IsNumber(value))
 			{
-				if (Convert.ToDouble(value) >= 0 && Convert.ToDouble(value) <= 5)
+				if (Convert.ToDouble(value,culture) >= 0 && Convert.ToDouble(value,culture) <= 5)
 				{
 					return true;
 				}
@@ -416,6 +419,25 @@ namespace Cintensivos_Seminarios.Views
 		//	dt.Columns.Add("DESCRIPCION");
 		//	dt.Columns.Add("NOTA_PORCENTAJE");
 		//	dt.Columns.Add("SISE_NOMBRE");
+		//DataTable dt = LoadTable();
+		//for (int i = 0; i < dtNotesGroup.Rows.Count  ; i++ )
+		//{
+		//	for (int j = 0; j < dtNotesGroupModify.Rows.Count ; j++)
+		//	{
+		//		if (dtNotesGroup.Rows[i]["NOTA_ID"].ToString() != dtNotesGroupModify.Rows[j]["NOTA_ID"].ToString())
+		//		{
+		//			DataRow row = dt.NewRow();
+		//			row["NOTA_ID"] = dtNotesGroup.Rows[i]["NOTA_ID"].ToString(); 
+		//			row["DESCRIPCION"] = dtNotesGroup.Rows[i]["DESCRIPCION"].ToString();
+		//			row["NOTA_PORCENTAJE"] = dtNotesGroup.Rows[i]["NOTA_PORCENTAJE"].ToString();
+		//			row["SISE_NOMBRE"] = dtNotesGroup.Rows[i]["SISE_NOMBRE"].ToString();
+		//			dt.Rows.Add(row);
+
+		//		}
+		//	}
+
+		//}
+		//DataTable newtemp1 = dt;
 
 		//	return dt;
 		//}

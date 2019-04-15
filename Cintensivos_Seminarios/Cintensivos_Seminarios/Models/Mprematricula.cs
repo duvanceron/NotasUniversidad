@@ -5,7 +5,7 @@ namespace Cintensivos_Seminarios.Models
 {
 	public class Mprematricula
 	{
-		private ConnectionOracle conn = new ConnectionOracle();
+		private ConnectionOracle conn;
 		private Transaction[] trans;
 		private Parametro[] parameter;
 
@@ -17,6 +17,7 @@ namespace Cintensivos_Seminarios.Models
 
 		public Mprematricula()
 		{
+			conn = new ConnectionOracle();
 		}
 
 		public bool mergePrematricula(Mprematricula obj)

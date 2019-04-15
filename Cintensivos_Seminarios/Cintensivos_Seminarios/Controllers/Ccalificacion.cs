@@ -26,5 +26,6 @@ namespace Cintensivos_Seminarios.Controllers
 			return modelCalificacion.MergeNotaIndividual(modelCalificacion);
 		}
 
+
 	}
 }
