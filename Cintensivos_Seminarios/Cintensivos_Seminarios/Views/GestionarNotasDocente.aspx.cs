@@ -310,7 +310,7 @@ namespace Cintensivos_Seminarios.Views
 		{
 			controllerCalificacion.caliId = -1;
 			controllerCalificacion.notaId = GetLastWord(notaId);
-			controllerCalificacion.caliValor = Convert.ToDouble(note,culture);
+			controllerCalificacion.caliValor = Convert.ToDouble(note, culture);
 			controllerCalificacion.premId = premId;
 
 			controllerCalificacion.MergeNotaIndividual(controllerCalificacion);
@@ -319,39 +319,66 @@ namespace Cintensivos_Seminarios.Views
 
 
 		[DirectMethod(Namespace = "notasDocente")]
-		public void ModifyNotesGroup(String jsonNotasGroup,String jsonPesos)
+		public void ModifyNotesGroup(String jsonNotasGroup, String jsonPesos)
 		{
-			try {
-				DataTable dtPesos = (DataTable)JsonConvert.DeserializeObject(jsonPesos, (typeof(DataTable)));
-				controllerNota.grup_Id = Convert.ToInt32(Session["CODIGO"]);
-				dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
+			try
+			{
+			DataTable dtPesos = (DataTable)JsonConvert.DeserializeObject(jsonPesos, (typeof(DataTable)));
+			controllerNota.grup_Id = Convert.ToInt32(Session["CODIGO"]);
+			dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
 
+			if (dtPesos.Rows.Count>0) {
 				DataTable dtdateToRemove = GetInnerData(dtNotesGroup, dtPesos);
 				RemoveNoteGroup(dtdateToRemove);
+			}char   
+			
 
-				DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
-
-				Session.Remove("GRUP_NOMBRE");
-				Session.Remove("CODIGO");
+			DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
+			AddNoteGroup(dtNotesGroupModify);
+			Session.Remove("GRUP_NOMBRE");
+			Session.Remove("CODIGO");
+				winDetails.
 
 			}
 			catch { };
-			
-		
+
+
 		}
 
 		private void RemoveNoteGroup(DataTable dtdateToRemove)
 		{
-			List<Cnota> lista = new List<Cnota>();
-			foreach (DataRow row in dtdateToRemove.Rows) {
-				controllerNota.nota_Id =Convert.ToInt32(row["NOTA_ID"]);
-				lista.Add(controllerNota);
-			}
 
-			controllerNota.RemoveNoteGroup(lista);
-			
+			List<Cnota> listNotesGroup = new List<Cnota>();
 
+			listNotesGroup = (from DataRow dr in dtdateToRemove.Rows
+					 select new Cnota()
+					 {
+						 nota_Id = Convert.ToInt32(dr["NOTA_ID"])
+					 }).ToList();
+
+
+			controllerNota.RemoveNoteGroup(listNotesGroup);
 		}
+
+		private void AddNoteGroup(DataTable dtdateToAdd)
+		{
+
+			List<Cnota> listNotesGroup = new List<Cnota>();
+
+			listNotesGroup = (from DataRow dr in dtdateToAdd.Rows
+							  select new Cnota()
+							  {
+								  nota_Id = Convert.ToInt32(dr["NOTA_ID"]),
+								  nota_Nombre = Convert.ToString(dr["DESCRIPCION"]),
+								  nota_Porcentaje = Convert.ToInt32(dr["NOTA_PORCENTAJE"]),
+								  sise_Id = Convert.ToInt32(dr["SISE_ID"]),
+								  grup_Id=Convert.ToInt32(Session["CODIGO"])
+							  }).ToList();
+
+
+			controllerNota.AddNoteGroup(listNotesGroup);
+		}
+
 
 
 		private static String RemoveLastWord(String s)
@@ -399,10 +426,10 @@ namespace Cintensivos_Seminarios.Views
 
 		private bool IsCorrectTheNota(String value)
 		{
-			
+
 			if (IsNumber(value))
 			{
-				if (Convert.ToDouble(value,culture) >= 0 && Convert.ToDouble(value,culture) <= 5)
+				if (Convert.ToDouble(value, culture) >= 0 && Convert.ToDouble(value, culture) <= 5)
 				{
 					return true;
 				}
@@ -412,37 +439,9 @@ namespace Cintensivos_Seminarios.Views
 			return false;
 		}
 
-		//private DataTable LoadTable()
-		//{
-		//	DataTable dt = new DataTable();
-		//	dt.Columns.Add("NOTA_ID");
-		//	dt.Columns.Add("DESCRIPCION");
-		//	dt.Columns.Add("NOTA_PORCENTAJE");
-		//	dt.Columns.Add("SISE_NOMBRE");
-		//DataTable dt = LoadTable();
-		//for (int i = 0; i < dtNotesGroup.Rows.Count  ; i++ )
-		//{
-		//	for (int j = 0; j < dtNotesGroupModify.Rows.Count ; j++)
-		//	{
-		//		if (dtNotesGroup.Rows[i]["NOTA_ID"].ToString() != dtNotesGroupModify.Rows[j]["NOTA_ID"].ToString())
-		//		{
-		//			DataRow row = dt.NewRow();
-		//			row["NOTA_ID"] = dtNotesGroup.Rows[i]["NOTA_ID"].ToString(); 
-		//			row["DESCRIPCION"] = dtNotesGroup.Rows[i]["DESCRIPCION"].ToString();
-		//			row["NOTA_PORCENTAJE"] = dtNotesGroup.Rows[i]["NOTA_PORCENTAJE"].ToString();
-		//			row["SISE_NOMBRE"] = dtNotesGroup.Rows[i]["SISE_NOMBRE"].ToString();
-		//			dt.Rows.Add(row);
+	
 
-		//		}
-		//	}
-
-		//}
-		//DataTable newtemp1 = dt;
-
-		//	return dt;
-		//}
-
-		public DataTable GetInnerData(DataTable dt1, DataTable dt2) 
+		public DataTable GetInnerData(DataTable dt1, DataTable dt2)
 		{
 			DataTable dtMerged = (from a in dt1.AsEnumerable()
 								  join b in dt2.AsEnumerable()

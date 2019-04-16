@@ -21,7 +21,7 @@
 
 		function insertRow(grid) {
 			if (!isFieldEmpty(App.txtWeight.value) && !isFieldEmpty(App.txtDescription.value) &&
-				isPositive(App.txtWeight.value)&& !isFieldEmpty(App.cmbxSistemaEvaluacion.value)) {
+				isPositive(App.txtWeight.value)&& !isFieldEmpty(App.cmbxSistemaEvaluacion.value)&&!isNaN(App.txtWeight.value)) {
 
 				verifyData(grid);
 
@@ -70,9 +70,10 @@
 			var store = grid.store,
 				row = store.indexOf(store.insert(0, {
 					NOTA_ID:-1,
-					DESCRIPCION: Ext.getCmp('txtDescription').getValue(),
+					DESCRIPCION: Ext.getCmp('txtDescription').getValue()+" ("+Ext.getCmp('txtWeight').getValue()+"%)",
 					NOTA_PORCENTAJE: Math.round(parseInt(Ext.getCmp('txtWeight').getValue())),
 					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE,
+					SISE_ID:App.cmbxSistemaEvaluacion.selection.data.SISE_ID
 				}, {})[0]);
 
 			cleanRecords();
@@ -150,6 +151,12 @@
 			return false;
 		}
 
+		function isNumber(number) {
+			if (parseInt(number) >= 1) {
+				return true;
+			}
+			return false;
+		}
 
 
 
@@ -496,6 +503,7 @@
 												<ext:ModelField Name="DESCRIPCION" />
 												<ext:ModelField Name="NOTA_PORCENTAJE" />
 												<ext:ModelField Name="SISE_NOMBRE" />
+												<ext:ModelField Name="SISE_ID" />
 
 											</Fields>
 										</ext:Model>
@@ -512,6 +520,7 @@
 										</Editor>
 									</ext:Column>
 									<ext:Column runat="server" Text="Tipo de Evaluación" CellWrap="true" DataIndex="SISE_NOMBRE" Flex="1" />
+									<ext:Column runat="server" Text="SISTEMA_ID" CellWrap="true" DataIndex="SISE_ID" Flex="1" Visible="false"/>
 								</Columns>
 							</ColumnModel>
 
