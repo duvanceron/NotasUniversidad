@@ -70,24 +70,28 @@ namespace Cintensivos_Seminarios.Views
 
 		protected void ConsultGroups(object sender, DirectEventArgs e)
 		{
-			this.controllerGrupo.fkCurso = Convert.ToInt32(e.ExtraParams["CURS_ID"]);
-			this.controllerDocente.codigo = 57425471;
-
-
-
-			if (Convert.ToInt32(e.ExtraParams["CURS_ID"]) == 1)
+			try
 			{
-				AddColumnsSeminario(controllerGrupo, controllerDocente);
-			}
-			else if (Convert.ToInt32(e.ExtraParams["CURS_ID"]) == 2)
-			{
+				this.controllerGrupo.fkCurso = Convert.ToInt32(e.ExtraParams["CURS_ID"]);
+				this.controllerDocente.codigo = 57425471;
 
-				AddColumnsCursoIntensivo(controllerGrupo, controllerDocente);
+
+
+				if (Convert.ToInt32(e.ExtraParams["CURS_ID"]) == 1)
+				{
+					AddColumnsSeminario(controllerGrupo, controllerDocente);
+				}
+				else if (Convert.ToInt32(e.ExtraParams["CURS_ID"]) == 2)
+				{
+
+					AddColumnsCursoIntensivo(controllerGrupo, controllerDocente);
+				}
 			}
+			catch { }
 
 
 		}
-
+		/*
 		private void LoadGroups(Cgrupo controllerGrupo, Cdocente controllerDocente)
 		{
 			Store store2 = this.StoreGroups;
@@ -105,7 +109,7 @@ namespace Cintensivos_Seminarios.Views
 			StoreGroups.DataSource = dtSeminarios;
 			StoreGroups.DataBind();
 			grid2.SelectionModel.Add(new RowSelectionModel { Mode = SelectionMode.Single });
-			/*Reconfigurar gridPanel*/
+			
 
 			grid2.ColumnModel.Columns.Add(BuildGridPanel(dtSeminarios));
 			string tex = cmbxSistemaEvaluacion.Text;
@@ -113,13 +117,16 @@ namespace Cintensivos_Seminarios.Views
 			grid2.Render();
 
 
-		}
+		}*/
 
 		protected void ConsultNote(object sender, DirectEventArgs e)
 		{
-			controllerPrematricula.fkgrupo = Convert.ToInt32(e.ExtraParams["CODIGO"]);
-			controllerPrematricula.estado = "APROBADO";
-			LoadNote(controllerPrematricula);
+			try
+			{
+				controllerPrematricula.fkgrupo = Convert.ToInt32(e.ExtraParams["CODIGO"]);
+				LoadNote(controllerPrematricula);
+			}
+			catch { }
 
 		}
 
@@ -263,51 +270,50 @@ namespace Cintensivos_Seminarios.Views
 
 		public void GestionarPesos(object sender, DirectEventArgs e)
 		{
-			winDetails.Hidden = false;
-			Session["GRUP_NOMBRE"] = Convert.ToString(e.ExtraParams["GRUP_NOMBRE"]);
-			Session["CODIGO"] = Convert.ToInt32(e.ExtraParams["CODIGO"]);
+			try
+			{
+				winDetails.Hidden = false;
+				Session["GRUP_NOMBRE"] = Convert.ToString(e.ExtraParams["GRUP_NOMBRE"]);
+				Session["CODIGO"] = Convert.ToInt32(e.ExtraParams["CODIGO"]);
 
-			winDetails.Title = Convert.ToString(Session["GRUP_NOMBRE"]);
-			controllerNota.grup_Id = Convert.ToInt32(Session["CODIGO"]);
-			dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
-			stPesos.DataSource = dtNotesGroup;
-			stPesos.DataBind();
+				winDetails.Title = Convert.ToString(Session["GRUP_NOMBRE"]);
+				controllerNota.grup_Id = Convert.ToInt32(Session["CODIGO"]);
+				dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
+				stPesos.DataSource = dtNotesGroup;
+				stPesos.DataBind();
+			} catch { }
 		}
 
 
 		[DirectMethod(Namespace = "notasDocente")]
-		public void Edit(int id, string field, string oldValue, string newValue, object customer)
+		public void Edit(int id, string field, string oldValue, string newValue, object customer, int codigo)
 		{
-			//newValue= newValue.Replace(',', '.');
 
-			if (IsNumber(newValue) && !IsEmpty(newValue) && IsCorrectTheNota(newValue))
+			try
 			{
-				EditNote(id, field, newValue);
-				GridStudents.GetStore().CommitChanges();
-
-			}
-			else
-			{
-
-				string message = "La nota ingresada no es correcta. ";
-				X.Msg.Notify(new NotificationConfig()
+				if (IsNumber(newValue) && !IsEmpty(newValue) && IsCorrectTheNota(newValue))
 				{
-					Title = "ERRROR",
-					Html = string.Format(message, id, field, oldValue, newValue),
-					Icon = Icon.BulletError,
-					Width = 200,
-					Height = 100
-				}).Show();
+					EditNote(id, field, newValue);
+					GridStudents.GetStore().CommitChanges();
+					controllerPrematricula.fkgrupo = Convert.ToInt32(codigo);
+					LoadNote(controllerPrematricula);
 
-				GridStudents.GetStore().RejectChanges();
+				}
+				else
+				{
+					ShowMessage("Error", "La nota ingresada no es correcta.", Icon.BulletError);
+					GridStudents.GetStore().RejectChanges();
 
+				}
 			}
+			catch { }
 
 
 		}
 
 		private void EditNote(int premId, string notaId, string note)
 		{
+
 			controllerCalificacion.caliId = -1;
 			controllerCalificacion.notaId = GetLastWord(notaId);
 			controllerCalificacion.caliValor = Convert.ToDouble(note, culture);
@@ -323,24 +329,29 @@ namespace Cintensivos_Seminarios.Views
 		{
 			try
 			{
-			DataTable dtPesos = (DataTable)JsonConvert.DeserializeObject(jsonPesos, (typeof(DataTable)));
-			controllerNota.grup_Id = Convert.ToInt32(Session["CODIGO"]);
-			dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
+				DataTable dtPesos = (DataTable)JsonConvert.DeserializeObject(jsonPesos, (typeof(DataTable)));
+				controllerNota.grup_Id = Convert.ToInt32(Session["CODIGO"]);
+				dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
 
-			if (dtPesos.Rows.Count>0) {
-				DataTable dtdateToRemove = GetInnerData(dtNotesGroup, dtPesos);
-				RemoveNoteGroup(dtdateToRemove);
-			}char   
-			
+				if (dtPesos.Rows.Count > 0)
+				{
+					DataTable dtdateToRemove = GetInnerData(dtNotesGroup, dtPesos);
+					RemoveNoteGroup(dtdateToRemove);
+				}
 
-			DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
-			AddNoteGroup(dtNotesGroupModify);
-			Session.Remove("GRUP_NOMBRE");
-			Session.Remove("CODIGO");
-				winDetails.
 
+				DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
+				AddNoteGroup(dtNotesGroupModify);
+				Session.Remove("GRUP_NOMBRE");
+				Session.Remove("CODIGO");
+				winDetails.Hidden = true;
+				ShowMessage("Éxito", "Datos ingresados de manera satisfactoria.", Icon.Accept);
 			}
-			catch { };
+			catch
+			{
+				ShowMessage("Error", "Verifique la información ingresada", Icon.BulletError);
+
+			};
 
 
 		}
@@ -351,10 +362,10 @@ namespace Cintensivos_Seminarios.Views
 			List<Cnota> listNotesGroup = new List<Cnota>();
 
 			listNotesGroup = (from DataRow dr in dtdateToRemove.Rows
-					 select new Cnota()
-					 {
-						 nota_Id = Convert.ToInt32(dr["NOTA_ID"])
-					 }).ToList();
+							  select new Cnota()
+							  {
+								  nota_Id = Convert.ToInt32(dr["NOTA_ID"])
+							  }).ToList();
 
 
 			controllerNota.RemoveNoteGroup(listNotesGroup);
@@ -372,7 +383,7 @@ namespace Cintensivos_Seminarios.Views
 								  nota_Nombre = Convert.ToString(dr["DESCRIPCION"]),
 								  nota_Porcentaje = Convert.ToInt32(dr["NOTA_PORCENTAJE"]),
 								  sise_Id = Convert.ToInt32(dr["SISE_ID"]),
-								  grup_Id=Convert.ToInt32(Session["CODIGO"])
+								  grup_Id = Convert.ToInt32(Session["CODIGO"])
 							  }).ToList();
 
 
@@ -439,9 +450,9 @@ namespace Cintensivos_Seminarios.Views
 			return false;
 		}
 
-	
 
-		public DataTable GetInnerData(DataTable dt1, DataTable dt2)
+
+		private DataTable GetInnerData(DataTable dt1, DataTable dt2)
 		{
 			DataTable dtMerged = (from a in dt1.AsEnumerable()
 								  join b in dt2.AsEnumerable()
@@ -451,6 +462,19 @@ namespace Cintensivos_Seminarios.Views
 								  select a).CopyToDataTable();
 
 			return dtMerged;
+		}
+
+		private void ShowMessage(string title, string message, Icon icono)
+		{
+
+			X.Msg.Notify(new NotificationConfig()
+			{
+				Title = title,
+				Html = string.Format(message),
+				Icon = icono,
+				Width = 200,
+				Height = 100
+			}).Show();
 		}
 
 

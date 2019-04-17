@@ -95,7 +95,7 @@
 
 			//e.value = e.value.replace(",", ".");
 			if (!(e.value === e.originalValue || (Ext.isDate(e.value) && Ext.Date.isEqual(e.value, e.originalValue)))) {
-				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data);
+				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data,App.GridAssignedGroups.selection.data.CODIGO);
 			;
 			}
 		}
@@ -106,7 +106,7 @@
 		}
 		function deleteRecords(grid) {
 			jsonPesos.push(App.gridPesos.selection.data);
-			console.log(jsonPesos);
+			
 			grid.deleteSelected();
 		}
 
