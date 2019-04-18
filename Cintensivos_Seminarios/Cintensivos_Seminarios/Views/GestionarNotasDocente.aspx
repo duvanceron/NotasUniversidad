@@ -21,7 +21,7 @@
 
 		function insertRow(grid) {
 			if (!isFieldEmpty(App.txtWeight.value) && !isFieldEmpty(App.txtDescription.value) &&
-				isPositive(App.txtWeight.value)&& !isFieldEmpty(App.cmbxSistemaEvaluacion.value)&&!isNaN(App.txtWeight.value)) {
+				isPositive(App.txtWeight.value) && !isFieldEmpty(App.cmbxSistemaEvaluacion.value) && !isNaN(App.txtWeight.value)) {
 
 				verifyData(grid);
 
@@ -69,11 +69,11 @@
 		function insertRecord(grid) {
 			var store = grid.store,
 				row = store.indexOf(store.insert(0, {
-					NOTA_ID:-1,
-					DESCRIPCION: Ext.getCmp('txtDescription').getValue()+" ("+Ext.getCmp('txtWeight').getValue()+"%)",
+					NOTA_ID: -1,
+					DESCRIPCION: Ext.getCmp('txtDescription').getValue() + " (" + Ext.getCmp('txtWeight').getValue() + "%)",
 					NOTA_PORCENTAJE: Math.round(parseInt(Ext.getCmp('txtWeight').getValue())),
 					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE,
-					SISE_ID:App.cmbxSistemaEvaluacion.selection.data.SISE_ID
+					SISE_ID: App.cmbxSistemaEvaluacion.selection.data.SISE_ID
 				}, {})[0]);
 
 			cleanRecords();
@@ -96,18 +96,21 @@
 			//e.value = e.value.replace(",", ".");
 			if (!(e.value === e.originalValue || (Ext.isDate(e.value) && Ext.Date.isEqual(e.value, e.originalValue)))) {
 				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data,App.GridAssignedGroups.selection.data.CODIGO);
-			;
+
 			}
 		}
 
 		saveChanges = function () {
 			notasDocente.ModifyNotesGroup(Ext.encode(App.gridPesos.getRowsValues()), Ext.encode(jsonPesos));
-			jsonPesos =[];
+			jsonPesos = [];
 		}
 		function deleteRecords(grid) {
-			jsonPesos.push(App.gridPesos.selection.data);
-			
-			grid.deleteSelected();
+			if (App.gridPesos.selection != null) {
+				jsonPesos.push(App.gridPesos.selection.data);
+				grid.deleteSelected();
+
+			}
+
 		}
 
 
@@ -138,7 +141,7 @@
 		}
 
 		function isFieldEmpty(txtField) {
-			if (txtField == ""||txtField ==null) {
+			if (txtField == "" || txtField == null) {
 				return true;
 			}
 			return false;
@@ -326,7 +329,7 @@
 							AutoHeight="true"
 							AutoScroll="true"
 							Flex="1"
-							Collapsible="true">
+							Collapsible="false">
 
 							<Store>
 								<ext:Store ID="StoreStudents" runat="server" PageSize="5">
@@ -520,7 +523,7 @@
 										</Editor>
 									</ext:Column>
 									<ext:Column runat="server" Text="Tipo de Evaluación" CellWrap="true" DataIndex="SISE_NOMBRE" Flex="1" />
-									<ext:Column runat="server" Text="SISTEMA_ID" CellWrap="true" DataIndex="SISE_ID" Flex="1" Visible="false"/>
+									<ext:Column runat="server" Text="SISTEMA_ID" CellWrap="true" DataIndex="SISE_ID" Flex="1" Visible="false" />
 								</Columns>
 							</ColumnModel>
 

@@ -80,11 +80,16 @@ namespace Cintensivos_Seminarios.Views
 				if (Convert.ToInt32(e.ExtraParams["CURS_ID"]) == 1)
 				{
 					AddColumnsSeminario(controllerGrupo, controllerDocente);
+					StoreStudents.Reload();
+					
 				}
 				else if (Convert.ToInt32(e.ExtraParams["CURS_ID"]) == 2)
 				{
 
 					AddColumnsCursoIntensivo(controllerGrupo, controllerDocente);
+					StoreStudents.Reload();
+					
+
 				}
 			}
 			catch { }
@@ -342,6 +347,13 @@ namespace Cintensivos_Seminarios.Views
 
 				DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
 				AddNoteGroup(dtNotesGroupModify);
+
+
+				StoreStudents.Reload();
+				RowSelectionModel sm = this.GridAssignedGroups.GetSelectionModel() as RowSelectionModel;
+				sm.ClearSelection();
+				
+
 				Session.Remove("GRUP_NOMBRE");
 				Session.Remove("CODIGO");
 				winDetails.Hidden = true;
