@@ -80,6 +80,7 @@ namespace Cintensivos_Seminarios.Views
 				if (Convert.ToInt32(e.ExtraParams["CURS_ID"]) == 1)
 				{
 					AddColumnsSeminario(controllerGrupo, controllerDocente);
+					GridStudents.Hidden = true;
 					StoreStudents.Reload();
 					
 				}
@@ -87,6 +88,7 @@ namespace Cintensivos_Seminarios.Views
 				{
 
 					AddColumnsCursoIntensivo(controllerGrupo, controllerDocente);
+					GridStudents.Hidden = true;
 					StoreStudents.Reload();
 					
 
@@ -137,6 +139,7 @@ namespace Cintensivos_Seminarios.Views
 
 		private void LoadNote(Cprematricula controller)
 		{
+			GridStudents.Hidden = false;
 			Store store = this.StoreStudents;
 			GridPanel grid = this.GridStudents;
 
@@ -277,6 +280,7 @@ namespace Cintensivos_Seminarios.Views
 		{
 			try
 			{
+				GridStudents.Hidden = true;
 				winDetails.Hidden = false;
 				Session["GRUP_NOMBRE"] = Convert.ToString(e.ExtraParams["GRUP_NOMBRE"]);
 				Session["CODIGO"] = Convert.ToInt32(e.ExtraParams["CODIGO"]);
@@ -286,7 +290,12 @@ namespace Cintensivos_Seminarios.Views
 				dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
 				stPesos.DataSource = dtNotesGroup;
 				stPesos.DataBind();
-			} catch { }
+
+				RowSelectionModel sm = this.GridAssignedGroups.GetSelectionModel() as RowSelectionModel;
+				sm.ClearSelection();
+
+			}
+			catch { }
 		}
 
 
@@ -348,14 +357,10 @@ namespace Cintensivos_Seminarios.Views
 				DataTable dtNotesGroupModify = (DataTable)JsonConvert.DeserializeObject(jsonNotasGroup, (typeof(DataTable)));
 				AddNoteGroup(dtNotesGroupModify);
 
-
-				StoreStudents.Reload();
-				RowSelectionModel sm = this.GridAssignedGroups.GetSelectionModel() as RowSelectionModel;
-				sm.ClearSelection();
-				
-
 				Session.Remove("GRUP_NOMBRE");
 				Session.Remove("CODIGO");
+				
+				X.Mask.Hide();
 				winDetails.Hidden = true;
 				ShowMessage("Éxito", "Datos ingresados de manera satisfactoria.", Icon.Accept);
 			}

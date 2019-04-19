@@ -95,7 +95,7 @@
 
 			//e.value = e.value.replace(",", ".");
 			if (!(e.value === e.originalValue || (Ext.isDate(e.value) && Ext.Date.isEqual(e.value, e.originalValue)))) {
-				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data,App.GridAssignedGroups.selection.data.CODIGO);
+				notasDocente.Edit(e.record.data.PREM_ID, e.field, e.originalValue, e.value, e.record.data, App.GridAssignedGroups.selection.data.CODIGO);
 
 			}
 		}
@@ -318,14 +318,26 @@
 
 						</ext:GridPanel>
 
+					</Items>
 
+				</ext:Panel>
+				<ext:Panel
+					ID="SouthPanel"
+					Icon="UserSuit" 
+					runat="server"
+					Region="South"
+					Split="true"
+					Collapsible="false"
+					Title="Estudiantes Matriculados"
+					Height="250"
+					BodyPadding="6">
 
+					<Items>
 
 						<ext:GridPanel
 							ID="GridStudents"
+							Hidden="true"
 							runat="server"
-							Title="Estudiantes Matriculadas"
-							Icon="UserSuit"
 							AutoHeight="true"
 							AutoScroll="true"
 							Flex="1"
@@ -338,8 +350,6 @@
 											<Fields>
 												<ext:ModelField Name="CODIGO" Type="String" />
 												<ext:ModelField Name="ESTUDIANTE" />
-												<ext:ModelField Name="NOTA 1" Type="Float" />
-												<ext:ModelField Name="NOTA 2" Type="Float" />
 												<ext:ModelField Name="DEFINITIVA" Type="Float" />
 											</Fields>
 										</ext:Model>
@@ -352,8 +362,6 @@
 									<ext:RowNumbererColumn runat="server" Width="35" />
 									<ext:Column runat="server" Text="Codigo" DataIndex="CODIGO" />
 									<ext:Column runat="server" Text="Estudiante" DataIndex="ESTUDIANTE" Flex="1" />
-									<ext:Column runat="server" Text="NOTA 1" DataIndex="NOTA 1" Flex="1" />
-									<ext:Column runat="server" Text="NOTA 2" DataIndex="NOTA 2" Flex="1" />
 									<ext:Column runat="server" Text="DEFINITIVA" DataIndex="DEFINITIVA" Flex="1" />
 								</Columns>
 							</ColumnModel>
@@ -372,17 +380,15 @@
 								<ext:GridView runat="server" StripeRows="true" />
 							</View>
 
-							<Buttons>
+<%--							<Buttons>
 								<ext:Button runat="server" Text="Refrescar" Icon="ArrowRefresh">
 									<Listeners>
 										<Click Handler="#{StoreStudents}.load();" />
 									</Listeners>
 								</ext:Button>
-							</Buttons>
+							</Buttons>--%>
 						</ext:GridPanel>
-
 					</Items>
-
 				</ext:Panel>
 
 
@@ -546,7 +552,9 @@
 
 				<ext:Button ID="btnSave" runat="server" Text="Guardar" Icon="Disk">
 					<Listeners>
-						<Click Handler="saveChanges();" />
+						
+						<Click Handler="Ext.net.Mask.show({ msg : 'Guardando..' }); saveChanges();" />
+
 					</Listeners>
 				</ext:Button>
 
