@@ -99,6 +99,13 @@
 
 			}
 		}
+		function confirmFunction(btn) {
+			if (btn == 'yes') {
+				saveChanges();
+				Ext.net.Mask.show({ msg: 'Guardando..' });
+
+			}
+		}
 
 		saveChanges = function () {
 			notasDocente.ModifyNotesGroup(Ext.encode(App.gridPesos.getRowsValues()), Ext.encode(jsonPesos));
@@ -160,7 +167,6 @@
 			}
 			return false;
 		}
-
 
 
 
@@ -323,7 +329,7 @@
 				</ext:Panel>
 				<ext:Panel
 					ID="SouthPanel"
-					Icon="UserSuit" 
+					Icon="UserSuit"
 					runat="server"
 					Region="South"
 					Split="true"
@@ -380,7 +386,7 @@
 								<ext:GridView runat="server" StripeRows="true" />
 							</View>
 
-<%--							<Buttons>
+							<%--							<Buttons>
 								<ext:Button runat="server" Text="Refrescar" Icon="ArrowRefresh">
 									<Listeners>
 										<Click Handler="#{StoreStudents}.load();" />
@@ -552,8 +558,9 @@
 
 				<ext:Button ID="btnSave" runat="server" Text="Guardar" Icon="Disk">
 					<Listeners>
-						
-						<Click Handler="Ext.net.Mask.show({ msg : 'Guardando..' }); saveChanges();" />
+
+						<Click Handler="Ext.MessageBox.confirm('Confirmación', '¿Desea guardar los cambios?', confirmFunction);">
+						</Click>
 
 					</Listeners>
 				</ext:Button>
