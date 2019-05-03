@@ -19,6 +19,16 @@
 			return Ext.String.format(template, (value >= 3) ? "green" : "red", value);
 		}
 
+		var prepare = function (grid, toolbar, rowIndex, record) {
+			var firstButton = toolbar.items.get(0);
+            if (record.data.DETD_ROL !="TITULAR") {
+                firstButton.setDisabled(true);
+                firstButton.setTooltip("Disabled");
+            }
+
+           
+        };
+
 		function insertRow(grid) {
 			if (!isFieldEmpty(App.txtWeight.value) && !isFieldEmpty(App.txtDescription.value) &&
 				isPositive(App.txtWeight.value) && !isFieldEmpty(App.cmbxSistemaEvaluacion.value) && !isNaN(App.txtWeight.value)) {
@@ -274,8 +284,10 @@
 											<Fields>
 												<ext:ModelField Name="CODIGO" />
 												<ext:ModelField Name="GRUP_NOMBRE" />
+												<ext:ModelField Name="DETD_ROL" />
 												<ext:ModelField Name="Periodó Académico" />
-
+												
+												
 											</Fields>
 										</ext:Model>
 									</Model>
@@ -286,19 +298,22 @@
 									<ext:RowNumbererColumn runat="server" Width="35" />
 									<ext:Column runat="server" Text="Codigo" DataIndex="CODIGO"></ext:Column>
 									<ext:Column runat="server" Text="Nombre Grupo" CellWrap="true" DataIndex="GRUP_NOMBRE" Flex="2" />
+									<ext:Column runat="server" Text="ROL" CellWrap="true" DataIndex="DETD_ROL"  />
 									<ext:Column runat="server" Text="Periodó Académico" CellWrap="true" DataIndex="Periodó Académico" Flex="2" />
+									
 									<%-- Flex: 1=10% ocupa del contenedor, 2=20% ocupa del contenedor, etc... --%>
 									<ext:CommandColumn ID="comandColumn1" runat="server" Width="160">
 										<Commands>
-
 											<ext:GridCommand Icon="FolderGo" CommandName="ConsultarPesos" Text="Gestionar pesos"  />
 										</Commands>
+										<PrepareToolbar Fn="prepare" />
 										<DirectEvents>
 											<Command OnEvent="GestionarPesos">
 												<ExtraParams>
 													<ext:Parameter Name="command" Value="command" Mode="Raw"></ext:Parameter>
 													<ext:Parameter Name="CODIGO" Value="record.data.CODIGO" Mode="Raw" />
 													<ext:Parameter Name="GRUP_NOMBRE" Value="record.data.GRUP_NOMBRE" Mode="Raw" />
+													
 												</ExtraParams>
 											</Command>
 										</DirectEvents>

@@ -221,7 +221,7 @@ namespace Cintensivos_Seminarios.Views
 		private void AddColumnsSeminario(Cgrupo controllerGrupo, Cdocente controllerDocente)
 		{
 			this.GridAssignedGroups.Reconfigure();
-			this.StoreGroups.Model[0].Fields.Add("CODIGO", "GRUP_NOMBRE", "Tema", "Periodó Académico", "Programa académico");
+			this.StoreGroups.Model[0].Fields.Add("CODIGO", "GRUP_NOMBRE", "DETD_ROL", "Tema", "Periodó Académico", "Programa académico");
 
 			this.StoreGroups.DataSource = this.controllerGrupo.ConsultarGrupos(controllerGrupo, controllerDocente);
 			this.StoreGroups.DataBind();
