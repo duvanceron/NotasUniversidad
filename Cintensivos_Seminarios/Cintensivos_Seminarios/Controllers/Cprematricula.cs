@@ -44,9 +44,10 @@ namespace Cintensivos_Seminarios.Controllers
 		public DataTable ConsultarPrematriculas(Cprematricula obj)
 		{
 			prematricula.fkgrupo = obj.fkgrupo;
-			parameter = new Parametro[2];
+			parameter = new Parametro[3];
 			parameter[0] = new Parametro("CURSOR1", "", "CURSOR", ParameterDirection.ReturnValue);
 			parameter[1] = new Parametro("GRUPO", prematricula.fkgrupo, "NUMBER", ParameterDirection.Input);
+			parameter[2] = new Parametro("DOCENTEID", 57425471, "NUMBER", ParameterDirection.Input);
 			return conn.OraProcedimiento("FN_LISTARNOTAS", parameter);
 		}
 

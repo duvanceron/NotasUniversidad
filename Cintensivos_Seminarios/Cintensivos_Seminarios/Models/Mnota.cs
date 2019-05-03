@@ -11,6 +11,7 @@ namespace Cintensivos_Seminarios.Models
 		public int nota_porcentaje { get; set; }
 		public int grup_id { get; set; }
 		public int sise_id { get; set; }
+		public int doceId { get; set; }
 		private ConnectionOracle conn;
 		private Parametro[] parameter;
 		private Transaction[] trans;
@@ -55,13 +56,13 @@ namespace Cintensivos_Seminarios.Models
 			
 			for (int i = 0; i < modelNota.Count; i++)
 			{
-				parameter = new Parametro[5];
+				parameter = new Parametro[6];
 				parameter[0] = new Parametro("NEWNOTA_ID", modelNota[i].nota_id);
 				parameter[1] = new Parametro("NEWNOTA_NOMBRE ", modelNota[i].nota_nombre);
 				parameter[2] = new Parametro("NEWNOTA_PORCENTAJE", modelNota[i].nota_porcentaje);
 				parameter[3] = new Parametro("NEWGRUP_ID", modelNota[i].grup_id);
 				parameter[4] = new Parametro("NEWSISE_ID", modelNota[i].sise_id);
-
+				parameter[5] = new Parametro("NEWDOCE_ID", modelNota[i].doceId);
 				Transaction[] trans = new Transaction[1];
 				trans[0] = new Transaction("PR_MERGEPORCENTAJENOTA", parameter);
 				conn.realizarTransaccion(trans);

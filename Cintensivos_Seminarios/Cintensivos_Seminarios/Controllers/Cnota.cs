@@ -13,7 +13,7 @@ namespace Cintensivos_Seminarios.Controllers
 		public int nota_Porcentaje { get; set; }
 		public int grup_Id  {get;set;}
 		public int sise_Id { get; set; }
-
+		public int doceId { get; set; }
 
 		public Cnota()
 		{
@@ -53,7 +53,8 @@ namespace Cintensivos_Seminarios.Controllers
 					nota_nombre=RemoveLastWord(dato.nota_Nombre),
 					nota_porcentaje=dato.nota_Porcentaje,
 					sise_id=dato.sise_Id,
-					grup_id=dato.grup_Id
+					grup_id=dato.grup_Id,
+					doceId=dato.doceId
 				};
 				listNotesGroup.Add(modelNota);
 			}

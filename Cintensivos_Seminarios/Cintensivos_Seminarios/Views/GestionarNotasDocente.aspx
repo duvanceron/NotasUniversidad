@@ -175,7 +175,7 @@
 </head>
 <body>
 	<form runat="server">
-		<ext:ResourceManager runat="server" Theme="Default" />
+		<ext:ResourceManager runat="server" Theme="Neptune" />
 		<ext:Viewport runat="server" Layout="BorderLayout">
 			<Items>
 
@@ -291,7 +291,7 @@
 									<ext:CommandColumn ID="comandColumn1" runat="server" Width="160">
 										<Commands>
 
-											<ext:GridCommand Icon="FolderGo" CommandName="ConsultarPesos" Text="Gestionar pesos" />
+											<ext:GridCommand Icon="FolderGo" CommandName="ConsultarPesos" Text="Gestionar pesos"  />
 										</Commands>
 										<DirectEvents>
 											<Command OnEvent="GestionarPesos">

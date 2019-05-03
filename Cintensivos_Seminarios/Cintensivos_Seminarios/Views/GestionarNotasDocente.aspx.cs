@@ -243,6 +243,11 @@ namespace Cintensivos_Seminarios.Views
 			};
 			this.GridAssignedGroups.InsertColumn(4, col);
 			this.GridAssignedGroups.InsertColumn(5, col2);
+			comandColumn1.Hidden = true;
+	
+
+
+
 
 		}
 
@@ -400,7 +405,8 @@ namespace Cintensivos_Seminarios.Views
 								  nota_Nombre = Convert.ToString(dr["DESCRIPCION"]),
 								  nota_Porcentaje = Convert.ToInt32(dr["NOTA_PORCENTAJE"]),
 								  sise_Id = Convert.ToInt32(dr["SISE_ID"]),
-								  grup_Id = Convert.ToInt32(Session["CODIGO"])
+								  grup_Id = Convert.ToInt32(Session["CODIGO"]),
+								  doceId= 57425471
 							  }).ToList();
 
 
