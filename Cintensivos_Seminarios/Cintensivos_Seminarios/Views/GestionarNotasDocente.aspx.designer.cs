@@ -139,6 +139,24 @@ namespace Cintensivos_Seminarios.Views {
         protected global::Ext.Net.Store StSistemaEvaluacion;
         
         /// <summary>
+        /// Control cmbxModulo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::Ext.Net.ComboBox cmbxModulo;
+        
+        /// <summary>
+        /// Control Store1.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::Ext.Net.Store Store1;
+        
+        /// <summary>
         /// Control txtDescription.
         /// </summary>
         /// <remarks>

@@ -24,6 +24,7 @@ namespace Cintensivos_Seminarios.Views
 		DataTable dtSeminarios;
 		DataTable dtNotesGroup;
 		CultureInfo culture;
+		TextInfo myTI;
 
 		public SeminariosDocente()
 		{
@@ -39,6 +40,7 @@ namespace Cintensivos_Seminarios.Views
 			dtNotes = new DataTable();
 			dtSeminarios = new DataTable();
 			culture = new CultureInfo("en-US");
+			myTI = new CultureInfo("en-US", false).TextInfo;
 		}
 		protected void Page_Load(object sender, EventArgs e)
 		{
@@ -82,7 +84,7 @@ namespace Cintensivos_Seminarios.Views
 					AddColumnsSeminario(controllerGrupo, controllerDocente);
 					GridStudents.Hidden = true;
 					StoreStudents.Reload();
-					
+
 				}
 				else if (Convert.ToInt32(e.ExtraParams["CURS_ID"]) == 2)
 				{
@@ -90,7 +92,7 @@ namespace Cintensivos_Seminarios.Views
 					AddColumnsCursoIntensivo(controllerGrupo, controllerDocente);
 					GridStudents.Hidden = true;
 					StoreStudents.Reload();
-					
+
 
 				}
 			}
@@ -244,7 +246,7 @@ namespace Cintensivos_Seminarios.Views
 			this.GridAssignedGroups.InsertColumn(4, col);
 			this.GridAssignedGroups.InsertColumn(5, col2);
 			comandColumn1.Hidden = true;
-	
+
 
 
 
@@ -287,9 +289,15 @@ namespace Cintensivos_Seminarios.Views
 			{
 				GridStudents.Hidden = true;
 				winDetails.Hidden = false;
+
 				Session["GRUP_NOMBRE"] = Convert.ToString(e.ExtraParams["GRUP_NOMBRE"]);
 				Session["CODIGO"] = Convert.ToInt32(e.ExtraParams["CODIGO"]);
+				string temp = myTI.ToUpper(e.ExtraParams["CURS_NOMBRE"]);
 
+				if (temp.Equals("SEMINARIOS DE PROFUNDIZACIÓN"))
+				{
+					cmbxModulo.Hidden = false;
+				}
 				winDetails.Title = Convert.ToString(Session["GRUP_NOMBRE"]);
 				controllerNota.grup_Id = Convert.ToInt32(Session["CODIGO"]);
 				dtNotesGroup = controllerNota.ConsultarPesosAcademicos(controllerNota);
@@ -364,9 +372,10 @@ namespace Cintensivos_Seminarios.Views
 
 				Session.Remove("GRUP_NOMBRE");
 				Session.Remove("CODIGO");
-				
+
 				X.Mask.Hide();
 				winDetails.Hidden = true;
+				cmbxModulo.Hidden = true;
 				ShowMessage("Éxito", "Datos ingresados de manera satisfactoria.", Icon.Accept);
 			}
 			catch
@@ -406,7 +415,7 @@ namespace Cintensivos_Seminarios.Views
 								  nota_Porcentaje = Convert.ToInt32(dr["NOTA_PORCENTAJE"]),
 								  sise_Id = Convert.ToInt32(dr["SISE_ID"]),
 								  grup_Id = Convert.ToInt32(Session["CODIGO"]),
-								  doceId= 57425471
+								  doceId = 57425471
 							  }).ToList();
 
 

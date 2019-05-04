@@ -121,6 +121,7 @@
 			notasDocente.ModifyNotesGroup(Ext.encode(App.gridPesos.getRowsValues()), Ext.encode(jsonPesos));
 			jsonPesos = [];
 		}
+
 		function deleteRecords(grid) {
 			if (App.gridPesos.selection != null) {
 				jsonPesos.push(App.gridPesos.selection.data);
@@ -313,7 +314,7 @@
 													<ext:Parameter Name="command" Value="command" Mode="Raw"></ext:Parameter>
 													<ext:Parameter Name="CODIGO" Value="record.data.CODIGO" Mode="Raw" />
 													<ext:Parameter Name="GRUP_NOMBRE" Value="record.data.GRUP_NOMBRE" Mode="Raw" />
-
+													<ext:Parameter Name="CURS_NOMBRE" Value="App.GridCourses.selection.data.CURS_NOMBRE" Mode="Raw" />
 												</ExtraParams>
 											</Command>
 										</DirectEvents>
@@ -474,7 +475,7 @@
 										</ext:Store>
 									</Store>
 								</ext:ComboBox>
-								<%--<ext:ComboBox
+								<ext:ComboBox
 									ID="cmbxModulo"
 									runat="server"
 									FieldLabel="MODULO"
@@ -488,7 +489,7 @@
 									TriggerAction="All"
 									EmptyText=""
 									MarginSpec="0 0 0 5"
-									Visible="false">
+									Hidden="true">
 									<Store>
 										<ext:Store ID="Store1" runat="server">
 											<Model>
@@ -501,7 +502,7 @@
 											</Model>
 										</ext:Store>
 									</Store>
-								</ext:ComboBox>--%>
+								</ext:ComboBox>
 
 								<ext:TextField ID="txtDescription" runat="server" FieldLabel="Descripción de la nota" Name="Title" Flex="2" MarginSpec="0 0 0 5" />
 								<ext:TextField ID="txtWeight" runat="server" FieldLabel="Peso de la nota" Name="Title" MarginSpec="0 0 0 5"></ext:TextField>
@@ -611,6 +612,8 @@
 
 				<ext:Button ID="btnCancel" runat="server" Text="Cancelar" Icon="Cancel">
 					<Listeners>
+						<Click Handler="">
+						</Click>
 					</Listeners>
 				</ext:Button>
 
