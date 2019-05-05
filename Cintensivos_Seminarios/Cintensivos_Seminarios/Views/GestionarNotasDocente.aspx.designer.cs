@@ -211,15 +211,6 @@ namespace Cintensivos_Seminarios.Views {
         protected global::Ext.Net.Button btnClear;
         
         /// <summary>
-        /// Control pnlPesosAcademicos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::Ext.Net.Panel pnlPesosAcademicos;
-        
-        /// <summary>
         /// Control gridPesos.
         /// </summary>
         /// <remarks>

@@ -299,7 +299,7 @@
 									<ext:RowNumbererColumn runat="server" Width="35" />
 									<ext:Column runat="server" Text="Codigo" DataIndex="CODIGO"></ext:Column>
 									<ext:Column runat="server" Text="Nombre Grupo" CellWrap="true" DataIndex="GRUP_NOMBRE" Flex="2" />
-									<ext:Column runat="server" Text="ROL" CellWrap="true" DataIndex="DETD_ROL" />
+									<ext:Column runat="server" Text="ROL" CellWrap="true" DataIndex="DETD_ROL" Hidden="true"/>
 									<ext:Column runat="server" Text="Periodó Académico" CellWrap="true" DataIndex="Periodó Académico" Flex="2" />
 
 									<%-- Flex: 1=10% ocupa del contenedor, 2=20% ocupa del contenedor, etc... --%>
@@ -363,7 +363,9 @@
 							AutoHeight="true"
 							AutoScroll="true"
 							Flex="1"
-							Collapsible="false">
+							Collapsible="false"
+							MinHeight="100"
+							MaxHeight="200">
 
 							<Store>
 								<ext:Store ID="StoreStudents" runat="server" PageSize="5">
@@ -401,14 +403,6 @@
 							<View>
 								<ext:GridView runat="server" StripeRows="true" />
 							</View>
-
-							<%--							<Buttons>
-								<ext:Button runat="server" Text="Refrescar" Icon="ArrowRefresh">
-									<Listeners>
-										<Click Handler="#{StoreStudents}.load();" />
-									</Listeners>
-								</ext:Button>
-							</Buttons>--%>
 						</ext:GridPanel>
 					</Items>
 				</ext:Panel>
@@ -422,12 +416,14 @@
 			ID="winDetails"
 			runat="server"
 			Icon="Folder"
+			Height="320"
 			Width="800"
-			Height="300"
+			MinHeight="320"
 			Modal="true"
 			Hidden="true">
 
 			<Items>
+
 				<ext:FormPanel
 					ID="pnlAddPesos"
 					runat="server"
@@ -540,64 +536,59 @@
 					</Buttons>
 
 				</ext:FormPanel>
-				<ext:Panel
-					ID="pnlPesosAcademicos"
+			
+				<ext:GridPanel
+					ID="gridPesos"
+					AutoScroll="true"
+					Frame="true"
+					Height="150"
 					Icon="Note"
+					MinHeight="150"
 					runat="server"
 					Region="South"
+					Resizable="false"
 					Title="Pesos registrados"
-					Frame="true"
-					Layout="FitLayout">
+>
+					<Store>
+						<ext:Store ID="stPesos" runat="server">
+							<Model>
+								<ext:Model runat="server">
+									<Fields>
+										<ext:ModelField Name="NOTA_ID" />
+										<ext:ModelField Name="DESCRIPCION" />
+										<ext:ModelField Name="NOTA_PORCENTAJE" />
+										<ext:ModelField Name="SISE_NOMBRE" />
+										<ext:ModelField Name="SISE_ID" />
 
-					<Items>
-						<ext:GridPanel
-							ID="gridPesos"
-							runat="server"
-							AutoScroll="true">
-							<Store>
-								<ext:Store ID="stPesos" runat="server">
-									<Model>
-										<ext:Model runat="server">
-											<Fields>
-												<ext:ModelField Name="NOTA_ID" />
-												<ext:ModelField Name="DESCRIPCION" />
-												<ext:ModelField Name="NOTA_PORCENTAJE" />
-												<ext:ModelField Name="SISE_NOMBRE" />
-												<ext:ModelField Name="SISE_ID" />
+									</Fields>
+								</ext:Model>
+							</Model>
 
-											</Fields>
-										</ext:Model>
-									</Model>
+						</ext:Store>
+					</Store>
+					<ColumnModel runat="server">
+						<Columns>
+							<ext:Column runat="server" Text="Descripción" CellWrap="true" DataIndex="DESCRIPCION" Flex="2" />
+							<ext:Column runat="server" Text="Peso" CellWrap="true" DataIndex="NOTA_PORCENTAJE">
+								<Editor>
+									<ext:TextField ID="TextFieldNota" runat="server" />
+								</Editor>
+							</ext:Column>
+							<ext:Column runat="server" Text="Tipo de Evaluación" CellWrap="true" DataIndex="SISE_NOMBRE" Flex="1" />
+							<ext:Column runat="server" Text="SISTEMA_ID" CellWrap="true" DataIndex="SISE_ID" Flex="1" Visible="false" />
+						</Columns>
+					</ColumnModel>
 
-								</ext:Store>
-							</Store>
-							<ColumnModel runat="server">
-								<Columns>
-									<ext:Column runat="server" Text="Descripción" CellWrap="true" DataIndex="DESCRIPCION" Flex="2" />
-									<ext:Column runat="server" Text="Peso" CellWrap="true" DataIndex="NOTA_PORCENTAJE">
-										<Editor>
-											<ext:TextField ID="TextFieldNota" runat="server" />
-										</Editor>
-									</ext:Column>
-									<ext:Column runat="server" Text="Tipo de Evaluación" CellWrap="true" DataIndex="SISE_NOMBRE" Flex="1" />
-									<ext:Column runat="server" Text="SISTEMA_ID" CellWrap="true" DataIndex="SISE_ID" Flex="1" Visible="false" />
-								</Columns>
-							</ColumnModel>
+					<SelectionModel>
+	
+						<ext:RowSelectionModel runat="server" Mode="Single" />
+					</SelectionModel>
 
-							<SelectionModel>
-								<%--<ext:RowSelectionModel runat="server" Mode="Multi" />--%>
-								<ext:RowSelectionModel runat="server" Mode="Single" />
-							</SelectionModel>
+					<View>
+						<ext:GridView runat="server" StripeRows="true" />
+					</View>
 
-							<View>
-								<ext:GridView runat="server" StripeRows="true" />
-							</View>
-
-						</ext:GridPanel>
-
-
-					</Items>
-				</ext:Panel>
+				</ext:GridPanel>
 			</Items>
 			<Buttons>
 
