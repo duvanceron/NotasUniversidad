@@ -274,7 +274,6 @@
 							runat="server"
 							Title="Grupos asignados"
 							Icon="Group"
-							AutoHeight="true"
 							Flex="1"
 							AutoScroll="true"
 							Collapsible="true">
@@ -420,7 +419,8 @@
 			Width="800"
 			MinHeight="320"
 			Modal="true"
-			Hidden="true">
+			Hidden="true"
+			AutoScroll="true">
 
 			<Items>
 
@@ -546,9 +546,7 @@
 					MinHeight="150"
 					runat="server"
 					Region="South"
-					Resizable="false"
-					Title="Pesos registrados"
->
+					Title="Pesos registrados">
 					<Store>
 						<ext:Store ID="stPesos" runat="server">
 							<Model>
