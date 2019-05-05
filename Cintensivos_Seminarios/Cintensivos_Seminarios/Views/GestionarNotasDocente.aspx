@@ -416,11 +416,10 @@
 			runat="server"
 			Icon="Folder"
 			Height="320"
-			Width="800"
+			MinWidth="800"
 			MinHeight="320"
 			Modal="true"
-			Hidden="true"
-			AutoScroll="true">
+			Hidden="true">
 
 			<Items>
 

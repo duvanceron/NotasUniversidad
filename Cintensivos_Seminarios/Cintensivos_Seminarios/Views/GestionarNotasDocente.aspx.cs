@@ -100,33 +100,7 @@ namespace Cintensivos_Seminarios.Views
 
 
 		}
-		/*
-		private void LoadGroups(Cgrupo controllerGrupo, Cdocente controllerDocente)
-		{
-			Store store2 = this.StoreGroups;
-			GridPanel grid2 = this.GridAssignedGroups;
-
-			// Limpia colecciones para remover datos y modelos anteriores 
-			store2.Reader.Clear();
-			grid2.SelectionModel.Clear();
-			grid2.ColumnModel.Columns.Clear();
-			store2.Model.Clear();
-
-			dtSeminarios = this.controllerGrupo.ListarSeminarios(controllerGrupo, controllerDocente);
-			//Reconfigurar store
-			store2.Fields.Add(ConsultFieldsStore(dtSeminarios));
-			StoreGroups.DataSource = dtSeminarios;
-			StoreGroups.DataBind();
-			grid2.SelectionModel.Add(new RowSelectionModel { Mode = SelectionMode.Single });
-			
-
-			grid2.ColumnModel.Columns.Add(BuildGridPanel(dtSeminarios));
-			string tex = cmbxSistemaEvaluacion.Text;
-
-			grid2.Render();
-
-
-		}*/
+	
 
 		protected void ConsultNote(object sender, DirectEventArgs e)
 		{
