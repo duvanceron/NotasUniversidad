@@ -19,6 +19,7 @@ namespace Cintensivos_Seminarios.Views
 		Csistema_evaluacion controllerSistema;
 		Cnota controllerNota;
 		Ccalificacion controllerCalificacion;
+		Cmodulo ctrlModulo;
 		List<Cnota> listNote;
 		DataTable dtNotes;
 		DataTable dtSeminarios;
@@ -35,6 +36,7 @@ namespace Cintensivos_Seminarios.Views
 			controllerSistema = new Csistema_evaluacion();
 			controllerNota = new Cnota();
 			controllerCalificacion = new Ccalificacion();
+			ctrlModulo = new Cmodulo();
 			listNote = new List<Cnota>();
 			dtNotesGroup = new DataTable();
 			dtNotes = new DataTable();
@@ -61,8 +63,6 @@ namespace Cintensivos_Seminarios.Views
 
 			StSistemaEvaluacion.DataSource = controllerSistema.ConsultarSistemasEvaluacion();
 			StSistemaEvaluacion.DataBind();
-
-
 		}
 
 
@@ -100,7 +100,7 @@ namespace Cintensivos_Seminarios.Views
 
 
 		}
-	
+
 
 		protected void ConsultNote(object sender, DirectEventArgs e)
 		{
@@ -198,7 +198,7 @@ namespace Cintensivos_Seminarios.Views
 		{
 			this.GridAssignedGroups.Reconfigure();
 			this.StoreGroups.Model[0].Fields.Add("CODIGO", "GRUP_NOMBRE", "Tema", "Periodó Académico", "Programa académico");
-			
+
 			this.StoreGroups.DataSource = this.controllerGrupo.ConsultarGrupos(controllerGrupo, controllerDocente);
 			this.StoreGroups.DataBind();
 			Column col = new Column
@@ -270,6 +270,8 @@ namespace Cintensivos_Seminarios.Views
 
 				if (temp.Equals("SEMINARIOS DE PROFUNDIZACIÓN"))
 				{
+					controllerGrupo.codigo = Convert.ToInt32(Session["CODIGO"]);
+					stModulo.DataSource = ctrlModulo.ConsultarModulos(controllerGrupo);
 					cmbxModulo.Hidden = false;
 				}
 				else

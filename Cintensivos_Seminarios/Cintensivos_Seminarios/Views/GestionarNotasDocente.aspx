@@ -475,8 +475,8 @@
 									runat="server"
 									FieldLabel="MODULO"
 									AllowBlank="true"
-									DisplayField="SISE_NOMBRE"
-									ValueField="SISE_ID"
+									DisplayField="MODU_NOMBRE"
+									ValueField="DOCE_ID"
 									TypeAhead="true"
 									QueryMode="Local"
 									Name="cmbxModulo"
@@ -486,12 +486,12 @@
 									MarginSpec="0 0 0 5"
 									Hidden="true">
 									<Store>
-										<ext:Store ID="Store1" runat="server">
+										<ext:Store ID="stModulo" runat="server">
 											<Model>
-												<ext:Model runat="server" IDProperty="SISE_ID">
+												<ext:Model runat="server" IDProperty="">
 													<Fields>
-														<ext:ModelField Name="SISE_ID" />
-														<ext:ModelField Name="SISE_NOMBRE" />
+														<ext:ModelField Name="DOCE_ID" />
+														<ext:ModelField Name="MODU_NOMBRE"/>
 													</Fields>
 												</ext:Model>
 											</Model>
