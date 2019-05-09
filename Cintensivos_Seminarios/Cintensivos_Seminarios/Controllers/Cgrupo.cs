@@ -49,44 +49,31 @@ namespace Cintensivos_Seminarios.Controllers
 			return grupo.MergeGrupo(grupo);
 		}
 
-		
-		/*public DataTable ConsultarGrupos()
-		{
-			return conn.realizarConsulta("PR_CONSULTARGRUPOS", "cursor1", null);
-		}*/
 
 
 		public DataTable ConsultarGrupos(Cgrupo obj, Cdocente objDocente)
 		{
 			grupo.fkCurso = obj.fkCurso;
 			docente.codigo = objDocente.codigo;
-			parameter = new Parametro[3];
-			parameter[0] = new Parametro("CURSOR1", "", "CURSOR", ParameterDirection.ReturnValue);
-			parameter[1] = new Parametro("NEW_TIPOCURSO", grupo.fkCurso, "NUMBER", ParameterDirection.Input);
-			parameter[2] = new Parametro("NEW_DOCENTE", docente.codigo, "NUMBER", ParameterDirection.Input);
-			return conn.OraProcedimiento("FN_CONSULTARGRUPOS",parameter);
+			return grupo.ConsultarGrupos(grupo, docente);
 		}
-		public DataTable ListarSeminarios(Cgrupo obj,Cdocente objDocente)
+		public DataTable ListarSeminarios(Cgrupo obj, Cdocente objDocente)
 		{
 			grupo.fkCurso = obj.fkCurso;
 			docente.codigo = objDocente.codigo;
-			parameter = new Parametro[3];
-			parameter[0] = new Parametro("CURSOR1", "", "CURSOR", ParameterDirection.ReturnValue);
-			parameter[1] = new Parametro("NEW_TIPOCURSO", grupo.fkCurso, "NUMBER", ParameterDirection.Input);
-			parameter[2] = new Parametro("NEW_DOCENTE", docente.codigo, "NUMBER", ParameterDirection.Input);
-			return conn.OraProcedimiento("FN_LISTARSEMINARIOS", parameter);
+			return grupo.ListarSeminarios(grupo, docente);
 		}
 
 
-		public DataTable GetGrupo(Cgrupo obj)
-		{
-			grupo.codigo = obj.codigo;
-			parameter = new Parametro[1];
-			parameter[0] = new Parametro("NEWCODIGO", grupo.codigo);
-			return conn.realizarConsulta("PR_CONSULTARGRUPO", "cursor1", parameter);
-		}
+		//public DataTable GetGrupo(Cgrupo obj)
+		//{
+		//	grupo.codigo = obj.codigo;
+		//	parameter = new Parametro[1];
+		//	parameter[0] = new Parametro("NEWCODIGO", grupo.codigo);
+		//	return conn.realizarConsulta("PR_CONSULTARGRUPO", "cursor1", parameter);
+		//}
 
 
-		
+
 	}
 }

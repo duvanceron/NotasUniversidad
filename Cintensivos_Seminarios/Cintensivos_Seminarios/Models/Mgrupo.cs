@@ -1,6 +1,6 @@
 ﻿
-using System.Data;
 using Cintensivos_Seminarios.BD;
+using System.Data;
 namespace Cintensivos_Seminarios.Models
 {
 	public class Mgrupo
@@ -25,7 +25,7 @@ namespace Cintensivos_Seminarios.Models
 		public Mgrupo()
 		{
 			conn = new ConnectionOracle();
-			
+
 			trans = new Transaction[1];
 		}
 
@@ -48,6 +48,27 @@ namespace Cintensivos_Seminarios.Models
 			trans[0] = new Transaction("PR_MERGEGRUPO", parameter);
 
 			return conn.realizarTransaccion(trans);
+		}
+
+		public DataTable ConsultarGrupos(Mgrupo objGrupo, Mdocente objDocente)
+		{
+
+			parameter = new Parametro[3];
+			parameter[0] = new Parametro("CURSOR1", "", "CURSOR", ParameterDirection.ReturnValue);
+			parameter[1] = new Parametro("NEW_TIPOCURSO", objGrupo.fkCurso, "NUMBER", ParameterDirection.Input);
+			parameter[2] = new Parametro("NEW_DOCENTE", objDocente.codigo, "NUMBER", ParameterDirection.Input);
+			return conn.OraProcedimiento("FN_CONSULTARGRUPOS", parameter);
+
+		}
+
+		public DataTable ListarSeminarios(Mgrupo grupo, Mdocente docente)
+		{
+
+			parameter = new Parametro[3];
+			parameter[0] = new Parametro("CURSOR1", "", "CURSOR", ParameterDirection.ReturnValue);
+			parameter[1] = new Parametro("NEW_TIPOCURSO", grupo.fkCurso, "NUMBER", ParameterDirection.Input);
+			parameter[2] = new Parametro("NEW_DOCENTE", docente.codigo, "NUMBER", ParameterDirection.Input);
+			return conn.OraProcedimiento("FN_LISTARSEMINARIOS", parameter);
 		}
 
 

@@ -1,22 +1,20 @@
-﻿using Cintensivos_Seminarios.BD;
+﻿using Cintensivos_Seminarios.Models;
 using System.Data;
 namespace Cintensivos_Seminarios.Controllers
 {
 	public class Csistema_evaluacion
 	{
-		private ConnectionOracle conn;
-		private Parametro[] parameter;
-		private Transaction[] trans;
 
+		public Msistema_evaluacion mSistema;
 		public Csistema_evaluacion()
 		{
-			conn = new ConnectionOracle();
+			mSistema = new Msistema_evaluacion();
 		}
 
-		public DataTable ConsultarSistemasEvaluacion() {
-			parameter = new Parametro[1];
-			parameter[0] = new Parametro("CURSOR1", "", "CURSOR", ParameterDirection.ReturnValue);
-			return conn.OraProcedimiento("FN_CONSULTARSISTEMASEVALUACION", parameter);
+		public DataTable ConsultarSistemasEvaluacion()
+		{
+
+			return mSistema.ConsultarSistemasEvaluacion();
 		}
 	}
 }

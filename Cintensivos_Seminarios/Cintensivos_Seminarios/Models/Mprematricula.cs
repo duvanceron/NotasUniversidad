@@ -33,5 +33,13 @@ namespace Cintensivos_Seminarios.Models
 			return conn.realizarTransaccion(trans);
 		}
 
+		public DataTable ConsultarPrematriculas(Mprematricula prematricula) {
+			parameter = new Parametro[3];
+			parameter[0] = new Parametro("CURSOR1", "", "CURSOR", ParameterDirection.ReturnValue);
+			parameter[1] = new Parametro("GRUPO", prematricula.fkgrupo, "NUMBER", ParameterDirection.Input);
+			parameter[2] = new Parametro("DOCENTEID", 57425471, "NUMBER", ParameterDirection.Input);
+			return conn.OraProcedimiento("FN_LISTARNOTAS", parameter);
+		}
+
 	}
 }
