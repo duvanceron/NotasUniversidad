@@ -85,10 +85,13 @@
 					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE,
 					SISE_ID: App.cmbxSistemaEvaluacion.selection.data.SISE_ID,
 					DOCE_ID:App.cmbxModulo.selection.data.DOCE_ID
-				}, {})[0]);
+				}, {})[0]); 
 
 			cleanRecords();
 		}
+
+
+
 
 		var edit = function (editor, e) {
             /*
