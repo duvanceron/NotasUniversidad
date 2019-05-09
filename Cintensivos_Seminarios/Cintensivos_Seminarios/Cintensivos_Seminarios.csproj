@@ -159,6 +159,7 @@
     <Compile Include="Controllers\Cestudiante.cs" />
     <Compile Include="Controllers\Cgrupo.cs" />
     <Compile Include="Controllers\Cintensidad_horaria.cs" />
+    <Compile Include="Controllers\Cmodulo.cs" />
     <Compile Include="Controllers\Cnota.cs" />
     <Compile Include="Controllers\Cperiodo.cs" />
     <Compile Include="Controllers\Cprematricula.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Models\Mestudiante.cs" />
     <Compile Include="Models\Mgrupo.cs" />
     <Compile Include="Models\Mintensidad_horaria.cs" />
+    <Compile Include="Models\Mmodulo.cs" />
     <Compile Include="Models\Mnota.cs" />
     <Compile Include="Models\Mperiodo.cs" />
     <Compile Include="Models\Mprematricula.cs" />
