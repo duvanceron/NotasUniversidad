@@ -270,9 +270,12 @@ namespace Cintensivos_Seminarios.Views
 
 				if (temp.Equals("SEMINARIOS DE PROFUNDIZACIÓN"))
 				{
+
+					cmbxModulo.Hidden = false;
 					controllerGrupo.codigo = Convert.ToInt32(Session["CODIGO"]);
 					stModulo.DataSource = ctrlModulo.ConsultarModulos(controllerGrupo);
-					cmbxModulo.Hidden = false;
+					stModulo.DataBind();
+					stModulo.DataBind();
 				}
 				else
 				{
