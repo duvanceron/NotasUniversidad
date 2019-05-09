@@ -75,7 +75,7 @@
 
 
 		}
-
+		 
 		function insertRecord(grid) {
 			var store = grid.store,
 				row = store.indexOf(store.insert(0, {
@@ -83,7 +83,8 @@
 					DESCRIPCION: Ext.getCmp('txtDescription').getValue() + " (" + Ext.getCmp('txtWeight').getValue() + "%)",
 					NOTA_PORCENTAJE: Math.round(parseInt(Ext.getCmp('txtWeight').getValue())),
 					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE,
-					SISE_ID: App.cmbxSistemaEvaluacion.selection.data.SISE_ID
+					SISE_ID: App.cmbxSistemaEvaluacion.selection.data.SISE_ID,
+					DOCE_ID:App.cmbxModulo.selection.data.DOCE_ID
 				}, {})[0]);
 
 			cleanRecords();
@@ -473,7 +474,7 @@
 								<ext:ComboBox
 									ID="cmbxModulo"
 									runat="server"
-									FieldLabel="MODULO"
+									FieldLabel="Modulo"
 									AllowBlank="true"
 									DisplayField="MODU_NOMBRE"
 									ValueField="DOCE_ID"
@@ -556,7 +557,7 @@
 										<ext:ModelField Name="NOTA_PORCENTAJE" />
 										<ext:ModelField Name="SISE_NOMBRE" />
 										<ext:ModelField Name="SISE_ID" />
-
+										<ext:ModelField Name="DOCE_ID" />
 									</Fields>
 								</ext:Model>
 							</Model>
@@ -573,6 +574,7 @@
 							</ext:Column>
 							<ext:Column runat="server" Text="Tipo de Evaluación" CellWrap="true" DataIndex="SISE_NOMBRE" Flex="1" />
 							<ext:Column runat="server" Text="SISTEMA_ID" CellWrap="true" DataIndex="SISE_ID" Flex="1" Visible="false" />
+							<ext:Column runat="server" Text="DOCE_ID" CellWrap="true" DataIndex="DOCE_ID" Flex="1" Visible="false" />
 						</Columns>
 					</ColumnModel>
 

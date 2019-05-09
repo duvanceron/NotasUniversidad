@@ -398,7 +398,7 @@ namespace Cintensivos_Seminarios.Views
 								  nota_Porcentaje = Convert.ToInt32(dr["NOTA_PORCENTAJE"]),
 								  sise_Id = Convert.ToInt32(dr["SISE_ID"]),
 								  grup_Id = Convert.ToInt32(Session["CODIGO"]),
-								  doceId = 57425471
+								  doceId = Convert.ToInt32(dr["DOCE_ID"])
 							  }).ToList();
 
 
