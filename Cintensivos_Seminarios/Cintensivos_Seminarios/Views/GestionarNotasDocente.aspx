@@ -57,7 +57,12 @@
 
 			if (App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE == "PARCIAL 70%") {
 				if (porcentajeNotas <= 70) {
-					insertRecord(grid);
+					if (App.GridCourses.selection.data.CURS_NOMBRE = "SEMINARIOS DE PROFUNDIZACIÓN") {
+						insertRecord(grid);
+					} else {
+						insertCursoIntensivo(grid);
+					}
+
 				} else {
 
 					showMsgError2("Peso de la nota incorrecto.");
@@ -67,7 +72,11 @@
 			}
 			else if (App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE == "PARCIAL 30%") {
 				if (porcentajeNotas <= 30) {
-					insertRecord(grid);
+					if (App.GridCourses.selection.data.CURS_NOMBRE = "SEMINARIOS DE PROFUNDIZACIÓN") {
+						insertRecord(grid);
+					} else {
+						insertCursoIntensivo(grid);
+					}
 				} else {
 					showMsgError2("Peso de la nota incorrecto.");
 				}
@@ -75,7 +84,7 @@
 
 
 		}
-		 
+
 		function insertRecord(grid) {
 			var store = grid.store,
 				row = store.indexOf(store.insert(0, {
@@ -84,12 +93,24 @@
 					NOTA_PORCENTAJE: Math.round(parseInt(Ext.getCmp('txtWeight').getValue())),
 					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE,
 					SISE_ID: App.cmbxSistemaEvaluacion.selection.data.SISE_ID,
-					DOCE_ID:App.cmbxModulo.selection.data.DOCE_ID
-				}, {})[0]); 
+					DOCE_ID: App.cmbxModulo.selection.data.DOCE_ID
+				}, {})[0]);
 
 			cleanRecords();
 		}
 
+		function insertCursoIntensivo(grid) {
+			var store = grid.store,
+				row = store.indexOf(store.insert(0, {
+					NOTA_ID: -1,
+					DESCRIPCION: Ext.getCmp('txtDescription').getValue() + " (" + Ext.getCmp('txtWeight').getValue() + "%)",
+					NOTA_PORCENTAJE: Math.round(parseInt(Ext.getCmp('txtWeight').getValue())),
+					SISE_NOMBRE: App.cmbxSistemaEvaluacion.selection.data.SISE_NOMBRE,
+					SISE_ID: App.cmbxSistemaEvaluacion.selection.data.SISE_ID,
+				}, {})[0]);
+
+			cleanRecords();
+		}
 
 
 
@@ -302,7 +323,7 @@
 									<ext:RowNumbererColumn runat="server" Width="35" />
 									<ext:Column runat="server" Text="Codigo" DataIndex="CODIGO"></ext:Column>
 									<ext:Column runat="server" Text="Nombre Grupo" CellWrap="true" DataIndex="GRUP_NOMBRE" Flex="2" />
-									<ext:Column runat="server" Text="ROL" CellWrap="true" DataIndex="DETD_ROL" Hidden="true"/>
+									<ext:Column runat="server" Text="ROL" CellWrap="true" DataIndex="DETD_ROL" Hidden="true" />
 									<ext:Column runat="server" Text="Periodó Académico" CellWrap="true" DataIndex="Periodó Académico" Flex="2" />
 
 									<%-- Flex: 1=10% ocupa del contenedor, 2=20% ocupa del contenedor, etc... --%>
@@ -495,7 +516,7 @@
 												<ext:Model runat="server" IDProperty="">
 													<Fields>
 														<ext:ModelField Name="DOCE_ID" />
-														<ext:ModelField Name="MODU_NOMBRE"/>
+														<ext:ModelField Name="MODU_NOMBRE" />
 													</Fields>
 												</ext:Model>
 											</Model>
@@ -539,7 +560,7 @@
 					</Buttons>
 
 				</ext:FormPanel>
-			
+
 				<ext:GridPanel
 					ID="gridPesos"
 					AutoScroll="true"
@@ -582,7 +603,7 @@
 					</ColumnModel>
 
 					<SelectionModel>
-	
+
 						<ext:RowSelectionModel runat="server" Mode="Single" />
 					</SelectionModel>
 
